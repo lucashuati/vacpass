@@ -1,2 +1,4 @@
-# vacpass
-VacPass - Projeto Educacional de Laboratorio de Engenharia de Software
+# Vacpass
+VacPass - Cartão de Vacinação Online
+
+Trabalho Semestral da discpilina de Laborátorio de Engenharia de Software
