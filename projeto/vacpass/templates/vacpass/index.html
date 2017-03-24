@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>VacPass - O seu cartão de vacinas online</h1>
+
+    <p>Bem vindo ao <em>VacPass</em>, um carão de vacinas online que serve para ganhar pontos e passar na matéria.
+        Seguimos o tutorial da
+        <a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Tutorial_local_library_website">mozilla</a>,
+            porque ele tem uma pá de coisa pronta e um monte de exemplo bacana
+    <p>O que está pronto: nada.
+    <p>O que falta fazer: {tudo} - {o que está pronto} <\p>
+    <p> gastei tempo escrevendo esse monte de merda, são 22:39 da noite e ainda não fui dormir. Amanhã tem aula as 7.
+        Adoro trabalhos escolares opressores. Amo muito o cefet e seus professores, cada um crendo na importancia
+        suprema de sua própria disciplina. Amo especialmente a situação em que os professores da mesma disciplina, um da
+        teórica e um da prática aplicam o mesmo trabalho (um exemplo hipotético, os professores de engenharia de
+        software e laboratório de engenharia de software aplicam o mesmo trabalho, e os alunos se divertem fazendo o
+        mesmo trabalho várias vezes. Isso deveria ser feito no primeiro período, para ensinar o reuso de código para os
+        calouros burros, já que copiamos todas as telas de um trabalho para outro).
+    <p> 22:43:14, vou olhar o keep para verificar qual é o próximo trabalho opressor que comecarei a fazer.
+        Provavelmente será o de engenharia de software teórico, que é igual a esse. Bora clonar tela.
+
+
+    <p>BASEDIR: {{ basedir }}</p>
+
+    <h2>PUDIM</h2>
+    <p>Um pudim é mostrado abaixo</p>
+
+
+    <div>
+        {% load static %}
+        <img src="{% static "images/pudim.jpg" %}" alt="Pudim" style="width:555px;height:540px;"/>
+    </div>
+
+{% endblock %}

@@ -10,7 +10,6 @@ class Cartao(models.Model):
         return self.nome
 
 
-# Create your models here.
 class Usuario(models.Model):
     CPF = models.CharField(max_length=11)
     email = models.CharField(max_length=50)

@@ -1,3 +1,18 @@
-from django.shortcuts import render
+from django.conf import settings
+from django.shortcuts import render, redirect
 
-# Create your views here.
+
+def index(request):
+    return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
+
+
+def solicitar_vacina(request):
+    pass
+
+
+def gerenciar_vacina(request):
+    pass
+
+
+def meu_cartao(request):
+    pass
