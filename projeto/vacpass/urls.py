@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^index/$', index, name='index'),
     url(r'^solicitarvacina/$', solicitar_vacina, name='solicitarvacina'),
     url(r'^gerenciarvacina/$', gerenciar_vacina, name='gerenciarvacina'),
-    url(r'^meucartao/$', meu_cartao, name='meucartao')
+    url(r'^meucartao/$', meu_cartao, name='meucartao'),
+    url('^contas/criar_conta', criar_conta, name="criarconta"),
 ]

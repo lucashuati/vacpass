@@ -21,7 +21,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/projeto/vacpass/templates" />
-        <option value="$MODULE_DIR$/projeto/templates" />
+        <option value="$MODULE_DIR$/projeto/projeto/templates" />
       </list>
     </option>
   </component>
