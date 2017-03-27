@@ -25,7 +25,7 @@ SECRET_KEY = 'nbmy(k^ps(ubv98x4s-7v3(cc88ey@mcl5)!gn)4g+90xyfuqb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = [u'localhost','127.0.0.1']
 
 
 # Application definition

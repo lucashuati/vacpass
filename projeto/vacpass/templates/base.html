@@ -23,7 +23,7 @@
             {% block sidebar %}
                 <ul class="sidebar-nav">
                     {% if user.is_authenticated %}
-                        <li><b>Olá, {{ user.get_username }}</b></li>
+                        <li><b>Olá, {{ user.first_name }}</b></li>
                         <li><a href="{% url 'index' %}">Meu cartão</a></li>
                         <li><a href="{% url 'solicitarvacina' %}">Solicitar vacina</a></li>
                         <hr/>
