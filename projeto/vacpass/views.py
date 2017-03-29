@@ -4,8 +4,12 @@ from vacpass.models import Usuario, Cartao
 from .forms import CriarContaForm
 from django.contrib.auth.models import User
 
+
 def index(request):
-    return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
+    if request.user.is_superuser:
+        return redirect('/admin/')
+    else:
+        return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
 
 
 def solicitar_vacina(request):
