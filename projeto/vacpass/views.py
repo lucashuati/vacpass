@@ -32,8 +32,8 @@ def criar_conta(request):
             confirmacao = form.cleaned_data['confirmar_senha']
             nascimento = form.cleaned_data['nascimento']
             email = form.cleaned_data['email']
-            user = User.objects.create_user(cpf, email, senha,first_name=nome)
-            newUser = Usuario(CPF=cpf,nascimento=nascimento,cartao=cartao,django_user = user)
+            user = User.objects.create_user(cpf, email, senha, first_name=nome)
+            newUser = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
             newUser.save()
             return redirect('login')
 
