@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from vacpass.models import Usuario, Cartao
 from .forms import CriarContaForm
 from django.contrib.auth.models import User
+from datetime import date
+
 
 def index(request):
     return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
@@ -32,9 +34,23 @@ def criar_conta(request):
             confirmacao = form.cleaned_data['confirmar_senha']
             nascimento = form.cleaned_data['nascimento']
             email = form.cleaned_data['email']
-            user = User.objects.create_user(cpf, email, senha, first_name=nome)
-            newUser = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
-            newUser.save()
-            return redirect('login')
+            CREATE_ERRO=[]
+            exits_cpf = User.objects.filter(username=cpf)
+            exits_email = User.objects.filter(email=email)
+            delta_days = date.today()-nascimento;
+            if(exits_email.count() > 0):
+                CREATE_ERRO.append(1)
+            if(exits_cpf.count() > 0):
+                CREATE_ERRO.append(2)
+            if(senha is not confirmacao):
+                CREATE_ERRO.append(3)
+
+            if(len(CREATE_ERRO) == 0):
+                user = User.objects.create_user(cpf, email, senha, first_name=nome)
+                newUser = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
+                newUser.save()
+                return redirect('login')
+            else:
+                return render(request, 'registration/criarconta.html',{'form':form, 'CREATE_ERRO':CREATE_ERRO})
 
     return render(request, 'registration/criarconta.html',{'form':form})
