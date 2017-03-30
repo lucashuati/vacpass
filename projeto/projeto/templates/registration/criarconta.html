@@ -2,7 +2,19 @@
 
 
 {% block content %}
-
+    {% if CREATE_ERRO %}
+      {% for i in CREATE_ERRO %}
+          {% if i == 1 %}
+            <p>Email já exite</p>
+          {% endif %}
+          {% if i == 2 %}
+            <p>CPF já exite</p>
+          {% endif %}
+          {% if i == 3 %}
+            <p>Senhas diferentes</p>
+          {% endif %}
+      {% endfor %}
+    {% endif %}
     {% if form.errors %}
         <div id="errors">
             <div class="inner">
