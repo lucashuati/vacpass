@@ -6,8 +6,12 @@ from django.contrib.auth.models import User
 from datetime import date
 
 
+
 def index(request):
-    return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
+    if request.user.is_superuser:
+        return redirect('/admin/')
+    else:
+        return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
 
 
 def solicitar_vacina(request):
