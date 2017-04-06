@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+    {% if login_criado %}
+      <p>Login Criado com sucesso, agora só realizar o login</p>
+    {% endif %}
     {% if form.errors %}
         <p>ihh troxa</p>
     {% endif %}

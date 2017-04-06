@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from vacpass.models import Usuario, Cartao
 from .forms import CriarContaForm
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import *
 from datetime import date
 
 
@@ -44,16 +45,21 @@ def criar_conta(request):
             delta_days = date.today()-nascimento;
             if(exits_email.count() > 0):
                 CREATE_ERRO.append(1)
+                form.add_error('email', "Erros?")
             if(exits_cpf.count() > 0):
                 CREATE_ERRO.append(2)
-            if(senha is not confirmacao):
+            if(senha != confirmacao):
                 CREATE_ERRO.append(3)
+            if(len(senha) < 6):
+                CREATE_ERRO.append(4)
 
             if(len(CREATE_ERRO) == 0):
                 user = User.objects.create_user(cpf, email, senha, first_name=nome)
                 newUser = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
                 newUser.save()
-                return redirect('login')
+                # return redirect('login')
+
+                return render(request, 'registration/login.html',{'form':AuthenticationForm(), 'login_criado':True})
             else:
                 return render(request, 'registration/criarconta.html',{'form':form, 'CREATE_ERRO':CREATE_ERRO})
 
