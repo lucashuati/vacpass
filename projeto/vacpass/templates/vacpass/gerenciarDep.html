@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post" id="formdependente" action={% url "gerenciardependente" %}>
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        </table>
+        <input type="submit" value="Criar"/>
+    </form>
+{% for dep in dependentes %}
+        <p>Nome : {{ dep.nome }}</p>
+        <p>CPF : {{ dep.CPF }}</p>
+        <p>Certidao : {{ dep.certidao }}</p>
+        <a id = 'ed' href = '{{ dep.get_absolute_url }}'> Editar </a>
+        <button> Excluir </button>
+    {% endfor %}
+
+{% endblock %}

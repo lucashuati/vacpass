@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
-from vacpass.models import Usuario, Cartao
-from .forms import CriarContaForm
+from django.views.generic import UpdateView
+
+from vacpass.models import Usuario, Cartao, Dependente
+from .forms import CriarContaForm, DependenteForm
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -26,6 +28,35 @@ def meu_cartao(request):
     pass
 
 
+
+
+def gerenciar_dep(request):
+    form = DependenteForm()
+    if request.POST:
+        form = DependenteForm(request.POST)
+        if form.is_valid():
+            cartao = Cartao()
+            cartao.save()
+            dependente = form.save(commit=False)
+            dependente.cartao = cartao
+            dependente.usuario = request.user.usuario
+            dependente.save()
+
+    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+    return render(request, 'vacpass/gerenciarDep.html', {'form':form, 'dependentes':dependentes})
+
+
+def edit_dep(request):
+    form = DependenteForm()
+    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+    return render(request,'vacpass/editDep.html', {'form':form, 'dependentes':dependentes})
+
+class DepUpdate(UpdateView):
+    model = Dependente
+    fields = ['CPF','nome','certidao']
+    template_name_suffix = '_update_form'
+
+
 def criar_conta(request):
     form = CriarContaForm()
     if request.POST:
@@ -46,7 +77,7 @@ def criar_conta(request):
                 CREATE_ERRO.append(1)
             if(exits_cpf.count() > 0):
                 CREATE_ERRO.append(2)
-            if(senha is not confirmacao):
+            if(senha != confirmacao):
                 CREATE_ERRO.append(3)
 
             if(len(CREATE_ERRO) == 0):
