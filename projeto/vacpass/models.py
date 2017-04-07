@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+
 
 class Cartao(models.Model):
     nome = models.CharField(max_length=12)
@@ -19,12 +21,15 @@ class Usuario(models.Model):
         return self.django_user.first_name
 
 class Dependente(models.Model):
-    CPF = models.CharField(max_length=11)
+    CPF = models.CharField(max_length=15)
     nome = models.CharField(max_length=50)
     certidao = models.CharField(max_length=50)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     cartao = models.ForeignKey(Cartao)
 
+    def get_absolute_url(self):
+
+        return reverse('editdep', args=[str(self.id)])
     def __str__(self):
         return self.nome
 

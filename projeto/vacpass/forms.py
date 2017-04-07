@@ -3,6 +3,9 @@
 from django import forms
 import datetime
 
+from django.forms import ModelForm
+
+from vacpass.models import Dependente
 
 
 class CriarContaForm(forms.Form):
@@ -20,3 +23,9 @@ class CriarContaForm(forms.Form):
         YEARS.append(str(i))
 
     nascimento = forms.DateField(widget=forms.SelectDateWidget(years=reversed(YEARS)), required=True)
+
+
+class DependenteForm(ModelForm):
+    class Meta:
+        model = Dependente
+        fields = ['CPF','nome','certidao']
