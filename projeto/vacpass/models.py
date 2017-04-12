@@ -20,6 +20,7 @@ class Usuario(models.Model):
     def __str__(self):
         return self.django_user.first_name
 
+
 class Dependente(models.Model):
     CPF = models.CharField(max_length=15)
     nome = models.CharField(max_length=50)
@@ -28,14 +29,19 @@ class Dependente(models.Model):
     cartao = models.ForeignKey(Cartao)
 
     def get_absolute_url(self):
-
         return reverse('editdep', args=[str(self.id)])
+
     def __str__(self):
         return self.nome
 
 
 class Vacina(models.Model):
     nome = models.CharField(max_length=50)
+    funcionalidade = models.CharField(max_length=500, default="")
+    publico_alvo = models.CharField(max_length=500, default="")
+    disponibilidade = models.CharField(max_length=500, default="")
+    proibitivos = models.CharField(max_length=500, default="")
+    preco = models.FloatField(default=0)
     cartao = models.ManyToManyField(Cartao, through="ControleVencimento")
 
     def __str__(self):
