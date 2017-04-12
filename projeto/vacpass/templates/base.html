@@ -22,7 +22,7 @@
                 <div id="user-tools">
                 Bem vindo, <strong>{{ user.first_name }}</strong>.
                 <a href="/">Home</a>
-                <a href="{% url 'password_change' %}">Gerenciar conta</a>
+                <a href="{% url 'gerenciardependente' %}">Gerenciar conta</a>
                 <a href="{% url 'logout' %}?next={% url 'index' %}">Sair</a>
                 </div>
             {% endif %}
@@ -34,7 +34,7 @@
                     <p><b>VacPass</b></p>
                     <li><a href="{% url 'index' %}">Meu cartão</a></li>
                     <li><a href="{% url 'solicitarvacina' %}">Solicitar vacina</a></li>
-                    <li><a href="{% url 'gerenciardependente' %}">Gerenciar dependente</a></li>
+                    <li><a href="{% url 'gerenciardependente' %}">Gerenciar Dependente</a></li>
                     <hr/>
                     <p><b>Conta</b></p>
                     <li><a href="{% url 'logout' %}?next={% url 'index' %}">Logout</a></li>

@@ -1,6 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h3>Sua Conta</h3>
+    <table>
+        <tbody>
+            <tr>
+               <th>
+                   <label>Nome</label>
+               </th>
+                <td>
+                    {{ request.user.first_name }}
+                </td>
+            </tr>
+            <tr>
+               <th>
+                   <label>Email</label>
+               </th>
+                <td>
+                    {{ request.user.email }}
+                </td>
+            </tr>
+            <tr>
+               <th>
+                   <label>CPF</label>
+               </th>
+                <td>
+                    {{ request.user.username }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="../editconta/{{ request.user.pk }}"><input type="submit" value="Editar"></a>
+    <a href=" {% url 'deleteconta' %}"><input type="submit" value="Excluir"></a>
+    <h3>Depentes</h3>
     <form method="post" id="formdependente" action={% url "gerenciardependente" %}>
         {% csrf_token %}
         <table>
