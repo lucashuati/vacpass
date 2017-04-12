@@ -77,9 +77,40 @@ def excluir_conta(request):
             if request.user.check_password(pass_field):
                 user = request.user
                 user.delete()
-                return redirect('logout')
+                return render(request, 'registration/login.html', {'form': AuthenticationForm(), 'delete_user': True})
+            else:
+                form.add_error('senha', 'Senha Incorreta')
+
     return render(request, 'vacpass/deletarConta.html', {'form': form})
 
+def editar_senha(request):
+    form = EditPassForm()
+
+    if request.POST:
+        form = EditPassForm(request.POST)
+        if form.is_valid():
+            senha_nova = form.cleaned_data['nova_senha']
+            confirmacao = form.cleaned_data['confirmacao']
+            senha_antiga = form.cleaned_data['senha']
+            has_error = False
+            if len(senha_nova) < 6:
+                form.add_error('nova_senha','A senha deve ter pelo menos 6 digitos')
+                has_error = True
+            if senha_nova != confirmacao:
+                form.add_error('confirmacao','Senhas nao coincidem')
+                has_error = True
+            if not request.user.check_password(senha_antiga):
+                form.add_error('senha','Senha Incorreta')
+                has_error = True
+            if has_error:
+               return render(request,'vacpass/editPass.html',{'form' : form})
+            else:
+                request.user.set_password(senha_nova)
+                request.user.save()
+                dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+                return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes, 'pass_success':True})
+
+    return render(request, 'vacpass/editPass.html', {'form':form})
 
 def editar_conta(request):
     form = EditarContaForm()
@@ -95,17 +126,22 @@ def editar_conta(request):
             pass_field = form.cleaned_data['password']
             user = request.user
             if email_field.initial != email_new:
-                if request.user.check_password(pass_field):
-                    user.email = email_new
-                else:
+                has_error = False
+                exits_email = User.objects.filter(email=email_new)
+                if exits_email.count() > 0:
+                    form.add_error('email','Email ja existe')
+                    has_error = True
+                if not request.user.check_password(pass_field):
                     form.add_error('password', 'Senha Incorreta')
-
+                    has_error = True
+                if has_error:
+                    return render(request, 'vacpass/editarConta.html', {'form': form})
+                else:
+                    user.email = email_new
             user.first_name = name_new
             user.save()
-
-            return redirect('editconta')
-        else:
-            redirect('login')
+            dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+            return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes, 'edit_success':True})
 
     return render(request, 'vacpass/editarConta.html', {'form': form})
 

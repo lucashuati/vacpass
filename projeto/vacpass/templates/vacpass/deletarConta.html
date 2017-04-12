@@ -3,12 +3,23 @@
 {% block content %}
     <h2>Tem certeza que deseja excluir esta conta ? </h2>
     <p>Nao sera possivel refazer essa açao, para confirmar digite sua senha</p>
-    <form action="{% url 'deleteconta' %}" method="post">
-        {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Excluir" />
-    </form>
-
+    <form method="post" action={% url "deleteconta" %}>
+            {% csrf_token %}
+            <table>
+               <tbody>
+               {% for field in form %}
+                   <tr>
+                       <th>
+                           {{ field.label_tag }}
+                       </th>
+                       <td>
+                           {{ field }}
+                           <p>{{ field.errors }}</p>
+                       </td>
+                   </tr>
+               {% endfor %}
+               </tbody>
+            </table>
+            <input type="submit" value="Criar"/>
+        </form>
 {% endblock %}

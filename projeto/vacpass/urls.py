@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^gerenciardependente/$', gerenciar_dep, name = "gerenciardependente"),
     url(r'^editdep/(?P<pk>\d+)$', DepUpdate.as_view(template_name='vacpass/editDep.html'), name = "editdep"),
     url(r'^editconta/', editar_conta, name = "editconta"),
-    url(r'^deleteconta/', excluir_conta, name = "deleteconta")
+    url(r'^deleteconta/', excluir_conta, name = "deleteconta"),
+    url(r'^editpass/', editar_senha, name = "editpass")
 ]

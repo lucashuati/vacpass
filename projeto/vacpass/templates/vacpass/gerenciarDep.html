@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if edit_success %}
+        <p>Usuario editado com sucesso</p>
+    {% endif %}
+     {% if pass_success %}
+        <p>Senha alterado com sucesso</p>
+    {% endif %}
     <h3>Sua Conta</h3>
     <table>
         <tbody>
