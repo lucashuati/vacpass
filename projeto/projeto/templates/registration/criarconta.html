@@ -15,25 +15,23 @@
           {% endif %}
       {% endfor %}
     {% endif %}
-    {% if form.errors %}
-        <div id="errors">
-            <div class="inner">
-                <p>Há erros no formulário</p>
-                {{ form.non_field_errors }}
-                <ul>
-                    {% for field in form %}
-                        {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    {% endif %}
-
     <h1>Criar conta</h1>
     <form method="post" id="formcriarconta" action={% url "criarconta" %}>
         {% csrf_token %}
         <table>
-        {{ form.as_table }}
+           <tbody>
+           {% for field in form %}
+               <tr>
+                   <th>
+                       {{ field.label_tag }}
+                   </th>
+                   <td>
+                       {{ field }}
+                       <p>{{ field.errors }}</p>
+                   </td>
+               </tr>
+           {% endfor %}
+           </tbody>
         </table>
         <input type="submit" value="Criar"/>
     </form>
