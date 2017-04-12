@@ -3,10 +3,9 @@ from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 
 from vacpass.models import Usuario, Cartao, Dependente
-from .forms import CriarContaForm, DependenteForm
+from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import *
-
 
 
 def index(request):
@@ -56,6 +55,61 @@ class DepUpdate(UpdateView):
     template_name_suffix = '_update_form'
 
 
+class ContaUpdate(UpdateView):
+    model = User
+    fields = ['first_name', 'email']
+    template_name_suffix = '_update_form'
+
+    def form_valid(self, form):
+        return super(ContaUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return '../gerenciardependente/'
+
+
+def excluir_conta(request):
+    form = ExcluirContaForm()
+
+    if request.POST:
+        form = ExcluirContaForm(request.POST)
+        if form.is_valid():
+            pass_field = form.cleaned_data['senha']
+            if request.user.check_password(pass_field):
+                user = request.user
+                user.delete()
+                return redirect('logout')
+    return render(request, 'vacpass/deletarConta.html', {'form': form})
+
+
+def editar_conta(request):
+    form = EditarContaForm()
+    email_field = form.fields['email']
+    name_field = form.fields['nome']
+    email_field.initial = request.user.email
+    name_field.initial = request.user.first_name
+    if request.POST:
+        form = EditarContaForm(request.POST)
+        if form.is_valid():
+            email_new = form.cleaned_data['email']
+            name_new = form.cleaned_data['nome']
+            pass_field = form.cleaned_data['password']
+            user = request.user
+            if email_field.initial != email_new:
+                if request.user.check_password(pass_field):
+                    user.email = email_new
+                else:
+                    form.add_error('password', 'Senha Incorreta')
+
+            user.first_name = name_new
+            user.save()
+
+            return redirect('editconta')
+        else:
+            redirect('login')
+
+    return render(request, 'vacpass/editarConta.html', {'form': form})
+
+
 def criar_conta(request):
     form = CriarContaForm()
     if request.POST:
@@ -71,16 +125,16 @@ def criar_conta(request):
             exits_cpf = User.objects.filter(username=cpf)
             exits_email = User.objects.filter(email=email)
             has_error = False;
-            if (exits_email.count() > 0):
-                form.add_error('email','Ja existe um usuario com esse Email')
+            if exits_email.count() > 0:
+                form.add_error('email', 'Ja existe um usuario com esse Email')
                 has_error = True
-            if (exits_cpf.count() > 0):
+            if exits_cpf.count() > 0:
                 form.add_error('cpf', 'Ja existe um usuario com esse CPF')
                 has_error = True
-            if (senha != confirmacao):
+            if senha != confirmacao:
                 form.add_error('confirmar_senha', 'Senhas nao coincidem')
                 has_error = True
-            if (len(senha) < 6):
+            if len(senha) < 6:
                 form.add_error('senha', 'Senha deve conter pelo menos seis digitos')
                 has_error = True
             if not has_error:
