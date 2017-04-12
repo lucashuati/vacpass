@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 
 from vacpass.models import Usuario, Cartao, Dependente
+from vacpass.tables import VacinaTable
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import *
@@ -19,8 +20,9 @@ def solicitar_vacina(request):
     pass
 
 
-def gerenciar_vacina(request):
-    pass
+def buscar_vacina(request):
+    context = {'vacinatable': VacinaTable(Vacina.objects.all())}
+    return render(request, 'vacpass/vacina/buscar.html', context=context)
 
 
 def meu_cartao(request):

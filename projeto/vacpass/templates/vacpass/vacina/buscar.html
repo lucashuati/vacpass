@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% comment %} block headerextra
+    <title>Select group to change | Django site admin</title>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/changelists.css">
+
+
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+
+
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.js"></script>
+    <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+    <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+
+    <meta name="robots" content="NONE,NOARCHIVE">
+ endblock {% endcomment %}
+
+
+{% block content %}
+    <h1>Digite uma palavra chave da vacina</h1>
+
+
+    {% load render_table from django_tables2 %}
+    {% render_table vacinatable %}
+{% endblock %}

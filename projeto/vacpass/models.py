@@ -44,6 +44,9 @@ class Vacina(models.Model):
     preco = models.FloatField(default=0)
     cartao = models.ManyToManyField(Cartao, through="ControleVencimento")
 
+    def doses(self):
+        return DoseVacina.objects.filter(vacina=self)
+
     def __str__(self):
         return self.nome
 
@@ -58,7 +61,10 @@ class ControleVencimento(models.Model):
         return self.vencimento
 
 
-class doseVacina(models.Model):
+class DoseVacina(models.Model):
     dose = models.IntegerField()
-    duracaoMeses = models.IntegerField()
+    idade = models.CharField(max_length=50)
     vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "dose {}: {} ".format(self.dose, self.idade)

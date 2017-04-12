@@ -48,8 +48,8 @@ class VacinaForm(ModelForm):
         model = Vacina
         exclude = []
     nome = forms.CharField(max_length=50)
-    funcionalidade = forms.CharField(max_length=500, widget=forms.Textarea)
-    publico_alvo = forms.CharField(max_length=500, widget=forms.Textarea)
-    disponibilidade = forms.CharField(max_length=500, widget=forms.Textarea)
-    proibitivos = forms.CharField(max_length=500, widget=forms.Textarea)
+    funcionalidade = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+    publico_alvo = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+    disponibilidade = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+    proibitivos = forms.CharField(max_length=500, widget=forms.Textarea, required=False, label='Contra-indicações e Precauções')
     preco = forms.FloatField
