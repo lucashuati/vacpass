@@ -29,8 +29,10 @@ class EditarContaForm(forms.Form):
 
 
 class EditPassForm(forms.Form):
-    senha = forms.CharField(label = 'Senha:', widget=forms.PasswordInput())
+    nova_senha = forms.CharField(label = 'Nova Senha:', widget=forms.PasswordInput())
     confirmacao = forms.CharField(label='Confirmacao:', widget=forms.PasswordInput())
+    senha = forms.CharField(label = 'Senha Antiga:', widget=forms.PasswordInput())
+
 
 class ExcluirContaForm(forms.Form):
     senha = forms.CharField(label='Senha:', widget=forms.PasswordInput())

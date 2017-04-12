@@ -10,6 +10,10 @@
         <p>Usuario criado com sucesso, agora basta realizar seu login</p>
     {% endif %}
 
+    {% if delete_user %}
+        <p>Usuario excluido com sucesso</p>
+    {% endif %}
+
     {% if next %}
         {% if not user.is_authenticated %}
             <p>Para acessar esta página, autentique no sistema ou crie uma nova conta</p>
