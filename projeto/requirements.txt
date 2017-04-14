@@ -1,6 +1,7 @@
 appdirs==1.4.3
 dj-database-url==0.4.1
 Django==1.10.2
+django-filter==1.0.2
 django-jquery==3.1.0
 django-localflavor-br==1.0
 django-tables2==1.4.2
