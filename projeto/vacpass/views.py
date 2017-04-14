@@ -1,14 +1,13 @@
 from django.conf import settings
+from django.contrib.auth.forms import *
 from django.shortcuts import render, redirect
-from django.views.generic import UpdateView, ListView, DetailView
-from django_tables2 import RequestConfig, SingleTableView
+from django.views.generic import UpdateView, DetailView
+from django_tables2 import RequestConfig
 
 from vacpass.filters import VacinaFilter
-from vacpass.models import Usuario, Cartao, Dependente
+from vacpass.models import Usuario, Cartao
 from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import *
 
 
 def index(request):

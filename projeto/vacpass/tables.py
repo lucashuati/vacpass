@@ -1,7 +1,7 @@
-from django.urls import reverse
-from django_tables2 import tables, A
+from django_tables2 import tables
 
 from vacpass.models import Vacina, DoseVacina
+
 
 def truncar(long_str):
     return long_str[:20]+'...'
