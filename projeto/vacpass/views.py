@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, ListView, DetailView
-from django_tables2 import RequestConfig
+from django_tables2 import RequestConfig, SingleTableView
 
+from vacpass.filters import VacinaFilter
 from vacpass.models import Usuario, Cartao, Dependente
 from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
@@ -26,14 +27,17 @@ def meu_cartao(request):
 
 
 def buscar_vacina(request):
-    vacinatable = VacinaTable(Vacina.objects.all())
-    RequestConfig(request).configure(vacinatable)
-    context = {'vacinatable': vacinatable}
-    return render(request, 'vacpass/vacina/buscar.html', context=context)
+    filter = VacinaFilter(request.GET, Vacina.objects.all())
+    table = VacinaTable(filter.qs)
+    RequestConfig(request).configure(table)
+    context = {'table': table, 'filter': filter}
+
+    return render(request, 'vacpass/vacina/buscar.html', context)
 
 
 class ConsultarVacina(DetailView):
     model = Vacina
+    template_name = 'vacpass/vacina/consultar.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -67,6 +71,7 @@ def edit_dep(request):
 
 class DepUpdate(UpdateView):
     model = Dependente
+    template_name = 'vacpass/editDep.html'
     fields = ['CPF', 'nome', 'certidao']
     template_name_suffix = '_update_form'
 

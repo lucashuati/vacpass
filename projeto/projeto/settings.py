@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [u'localhost','127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_filters',
     'django_tables2',
     'django.contrib.admin',
     'django.contrib.auth',

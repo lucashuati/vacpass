@@ -12,7 +12,7 @@ class VacinaTable(tables.Table):
         model = Vacina
         exclude = ['id']
     doses = tables.columns.Column()
-    nome = tables.columns.LinkColumn(args=[A('pk')]) #TODO: acessor=pk
+    nome = tables.columns.LinkColumn(accessor='nome')
 
     def render_doses(self, record):
         return DoseVacina.objects.filter(vacina=record).count()
@@ -36,4 +36,4 @@ class VacinaTable(tables.Table):
 class DoseTable(tables.Table):
     class Meta:
         model = DoseVacina
-        exclude = ['id', 'vacina']
+        exclude = ['id','vacina']
