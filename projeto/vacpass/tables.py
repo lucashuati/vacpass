@@ -1,4 +1,5 @@
-from django_tables2 import tables
+from django.urls import reverse
+from django_tables2 import tables, A
 
 from vacpass.models import Vacina, DoseVacina
 
@@ -11,6 +12,7 @@ class VacinaTable(tables.Table):
         model = Vacina
         exclude = ['id']
     doses = tables.columns.Column()
+    nome = tables.columns.LinkColumn(args=[A('pk')]) #TODO: acessor=pk
 
     def render_doses(self, record):
         return DoseVacina.objects.filter(vacina=record).count()
@@ -29,3 +31,9 @@ class VacinaTable(tables.Table):
 
     def render_preco(self, record):
         return 'gratuito' if record.preco == 0 else record.preco
+
+
+class DoseTable(tables.Table):
+    class Meta:
+        model = DoseVacina
+        exclude = ['id', 'vacina']

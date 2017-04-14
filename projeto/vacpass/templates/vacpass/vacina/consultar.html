@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ object.nome }}</h1>
+
+    <h2>Funcionalidade</h2>
+    <p>{{ object.funcionalidade }}</p>
+
+    <h2>Funcionalidade</h2>
+    <p>{{ object.publico_alvo }}</p>
+
+    <h2>Disponibilidade</h2>
+    <p>{{ object.disponibilidade }}</p>
+
+    <h2>Contra-indicações e precauções</h2>
+    <p>{{ object.proibitivos }}</p>
+
+    <h2>Doses</h2>
+    {% load render_table from django_tables2 %}
+    {% render_table dosetable %}
+{% endblock %}

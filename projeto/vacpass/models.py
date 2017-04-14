@@ -47,6 +47,9 @@ class Vacina(models.Model):
     def doses(self):
         return DoseVacina.objects.filter(vacina=self)
 
+    def get_absolute_url(self):
+        return reverse('consultarvacina', args=[str(self.id)])
+
     def __str__(self):
         return self.nome
 
