@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView, DetailView
+from django_tables2 import RequestConfig, SingleTableView
 
+from vacpass.filters import VacinaFilter
 from vacpass.models import Usuario, Cartao, Dependente
+from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import *
@@ -19,12 +22,29 @@ def solicitar_vacina(request):
     pass
 
 
-def gerenciar_vacina(request):
-    pass
-
-
 def meu_cartao(request):
     pass
+
+
+def buscar_vacina(request):
+    filter = VacinaFilter(request.GET, Vacina.objects.all())
+    table = VacinaTable(filter.qs)
+    RequestConfig(request).configure(table)
+    context = {'table': table, 'filter': filter}
+
+    return render(request, 'vacpass/vacina/buscar.html', context)
+
+
+class ConsultarVacina(DetailView):
+    model = Vacina
+    template_name = 'vacpass/vacina/consultar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dosetable = DoseTable(self.object.dosevacina_set.all())
+        RequestConfig(self.request).configure(dosetable)
+        context.update(dosetable=dosetable)
+        return context
 
 
 def gerenciar_dep(request):
@@ -51,6 +71,7 @@ def edit_dep(request):
 
 class DepUpdate(UpdateView):
     model = Dependente
+    template_name = 'vacpass/editDep.html'
     fields = ['CPF', 'nome', 'certidao']
     template_name_suffix = '_update_form'
 

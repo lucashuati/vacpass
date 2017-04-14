@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Pesquisar vacinas</h1>
+    <form action="" method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" />
+    </form>
+
+    {% load render_table from django_tables2 %}
+    {% render_table table %}
+{% endblock %}

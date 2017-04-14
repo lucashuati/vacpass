@@ -5,7 +5,7 @@ import datetime
 
 from django.forms import ModelForm
 
-from vacpass.models import Dependente
+from vacpass.models import Dependente, Vacina
 
 
 class CriarContaForm(forms.Form):
@@ -34,10 +34,24 @@ class EditPassForm(forms.Form):
     senha = forms.CharField(label = 'Senha Antiga:', widget=forms.PasswordInput())
 
 
+
 class ExcluirContaForm(forms.Form):
     senha = forms.CharField(label='Senha:', widget=forms.PasswordInput())
+
 
 class DependenteForm(ModelForm):
     class Meta:
         model = Dependente
         fields = ['CPF', 'nome', 'certidao']
+
+
+class VacinaForm(ModelForm):
+    class Meta:
+        model = Vacina
+        exclude = []
+    nome = forms.CharField(max_length=50)
+    funcionalidade = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+    publico_alvo = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+    disponibilidade = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
+    proibitivos = forms.CharField(max_length=500, widget=forms.Textarea, required=False, label='Contra-indicações e Precauções')
+    preco = forms.FloatField
