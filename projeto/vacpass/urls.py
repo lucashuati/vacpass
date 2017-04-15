@@ -15,5 +15,5 @@ urlpatterns = [
     url(r'^editdep/(?P<pk>\d+)$', DepUpdate.as_view(), name="editdep"),
     url(r'^editconta/', editar_conta, name="editconta"),
     url(r'^deleteconta/', excluir_conta, name="deleteconta"),
-    url(r'^editpass/', editar_senha, name = "editpass")
+    url(r'^editpass/', editar_senha, name="editpass")
 ]

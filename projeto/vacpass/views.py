@@ -1,9 +1,12 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.forms import *
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import UpdateView, DetailView
 from django_tables2 import RequestConfig
 
+import constants
 from vacpass.filters import VacinaFilter
 from vacpass.models import Usuario, Cartao
 from vacpass.tables import VacinaTable, DoseTable
@@ -29,6 +32,8 @@ def buscar_vacina(request):
     filter = VacinaFilter(request.GET, Vacina.objects.all())
     table = VacinaTable(filter.qs)
     RequestConfig(request).configure(table)
+    if not filter.qs.exists():
+        messages.warning(request, constants.noresult)
     context = {'table': table, 'filter': filter}
 
     return render(request, 'vacpass/vacina/buscar.html', context)
@@ -74,6 +79,10 @@ class DepUpdate(UpdateView):
     fields = ['CPF', 'nome', 'certidao']
     template_name_suffix = '_update_form'
 
+    def get_success_url(self):
+        messages.success(self.request, "O dependente foi editado")
+        return reverse(gerenciar_dep)
+
 
 class ContaUpdate(UpdateView):
     model = User
@@ -97,11 +106,13 @@ def excluir_conta(request):
             if request.user.check_password(pass_field):
                 user = request.user
                 user.delete()
-                return render(request, 'registration/login.html', {'form': AuthenticationForm(), 'delete_user': True})
+                messages.info(request, "Sua conta foi excluida.")
+                return redirect('login')
             else:
                 form.add_error('senha', 'Senha Incorreta')
 
     return render(request, 'vacpass/deletarConta.html', {'form': form})
+
 
 def editar_senha(request):
     form = EditPassForm()
@@ -114,23 +125,22 @@ def editar_senha(request):
             senha_antiga = form.cleaned_data['senha']
             has_error = False
             if len(senha_nova) < 6:
-                form.add_error('nova_senha','A senha deve ter pelo menos 6 digitos')
+                form.add_error('nova_senha', 'A senha deve ter pelo menos 6 digitos')
                 has_error = True
             if senha_nova != confirmacao:
-                form.add_error('confirmacao','Senhas nao coincidem')
+                form.add_error('confirmacao', 'Senhas nao coincidem')
                 has_error = True
             if not request.user.check_password(senha_antiga):
-                form.add_error('senha','Senha Incorreta')
+                form.add_error('senha', 'Senha Incorreta')
                 has_error = True
-            if has_error:
-               return render(request,'vacpass/editPass.html',{'form' : form})
-            else:
+            if not has_error:
                 request.user.set_password(senha_nova)
                 request.user.save()
                 dependentes = Dependente.objects.filter(usuario=request.user.usuario)
-                return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes, 'pass_success':True})
+                messages.info(request, 'Sua senha foi atualizada')
+                return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes})
 
-    return render(request, 'vacpass/editPass.html', {'form':form})
+    return render(request, 'vacpass/editPass.html', {'form': form})
 
 def editar_conta(request):
     form = EditarContaForm()
@@ -161,7 +171,8 @@ def editar_conta(request):
             user.first_name = name_new
             user.save()
             dependentes = Dependente.objects.filter(usuario=request.user.usuario)
-            return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes, 'edit_success':True})
+            messages.info(request, 'Usuario editado com sucesso')
+            return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes})
 
     return render(request, 'vacpass/editarConta.html', {'form': form})
 
@@ -180,7 +191,7 @@ def criar_conta(request):
             email = form.cleaned_data['email']
             exits_cpf = User.objects.filter(username=cpf)
             exits_email = User.objects.filter(email=email)
-            has_error = False;
+            has_error = False
             if exits_email.count() > 0:
                 form.add_error('email', 'Ja existe um usuario com esse Email')
                 has_error = True
@@ -195,9 +206,10 @@ def criar_conta(request):
                 has_error = True
             if not has_error:
                 user = User.objects.create_user(cpf, email, senha, first_name=nome)
-                newUser = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
-                newUser.save()
-                return render(request, 'registration/login.html', {'form': AuthenticationForm(), 'new_user': True})
+                new_user = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
+                new_user.save()
+                messages.info(request, 'Usuario criado com sucesso, agora basta realizar seu login')
+                return render(request, 'registration/login.html', {'form': AuthenticationForm()})
 
             return render(request, 'registration/criarconta.html', {'form': form})
 

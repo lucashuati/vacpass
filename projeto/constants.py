@@ -1,0 +1,1 @@
+noresult = 'Nenhum resultado encontrado'
