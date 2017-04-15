@@ -3,15 +3,16 @@
 {% block content %}
 
     {% if form.errors %}
-        <p>ihh troxa</p>
-    {% endif %}
-
-    {% if new_user %}
-        <p>Usuario criado com sucesso, agora basta realizar seu login</p>
-    {% endif %}
-
-    {% if delete_user %}
-        <p>Usuario excluido com sucesso</p>
+        <ul class="messagelist">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li class="error">{{ error|escape }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li class="error">{{ error|escape }}</li>
+        {% endfor %}
+        </ul>
     {% endif %}
 
     {% if next %}
