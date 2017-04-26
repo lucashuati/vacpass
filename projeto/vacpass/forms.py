@@ -3,6 +3,7 @@
 import datetime
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 from vacpass.models import Dependente, Vacina
@@ -42,8 +43,7 @@ class ExcluirContaForm(forms.Form):
 class DependenteForm(ModelForm):
     class Meta:
         model = Dependente
-        fields = ['CPF', 'nome', 'certidao']
-
+        fields = ['tipo', 'nome', 'ndocumento']
 
 class VacinaForm(ModelForm):
     class Meta:

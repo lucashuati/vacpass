@@ -5,4 +5,4 @@ from django.dispatch import receiver
 
 @receiver(user_logged_in)
 def login_action(sender, user, request, **kwargs):
-    messages.info(request, "Usuário autenticado com sucesso")
+    messages.info(request, "Usuario autenticado com sucesso")

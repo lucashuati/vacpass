@@ -41,11 +41,11 @@
         <input type="submit" value="Criar"/>
     </form>
 {% for dep in dependentes %}
-        <p>Nome : {{ dep.nome }}</p>
-        <p>CPF : {{ dep.CPF }}</p>
-        <p>Certidao : {{ dep.certidao }}</p>
+    <p><b>Nome</b> : {{ dep.nome }}</p>
+    <p><b>Documento</b> : {{ dep.tipo }}</p>
+    <p><b>Numero</b> : {{ dep.ndocumento }}</p>
         <a id = 'ed' href = '{{ dep.get_absolute_url }}'> Editar </a>
-        <button> Excluir </button>
+        <a id = 'exd' href = '{{ dep.get_url }}'> Excluir </a>
     {% endfor %}
 
 {% endblock %}

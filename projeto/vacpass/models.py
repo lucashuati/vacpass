@@ -22,14 +22,19 @@ class Usuario(models.Model):
 
 
 class Dependente(models.Model):
-    CPF = models.CharField(max_length=15)
+    CHOICES = [('CPF', 'CPF'), ('RG', 'RG'), ('certidao', 'certidao')]
+
+    tipo = models.CharField(max_length=10, choices=CHOICES)
     nome = models.CharField(max_length=50)
-    certidao = models.CharField(max_length=50)
+    ndocumento = models.CharField(max_length=50)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     cartao = models.ForeignKey(Cartao)
 
     def get_absolute_url(self):
         return reverse('editdep', args=[str(self.id)])
+
+    def get_url(self):
+        return reverse('excluidep', args = [str(self.id)])
 
     def __str__(self):
         return self.nome
