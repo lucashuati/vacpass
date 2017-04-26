@@ -11,7 +11,8 @@ from vacpass.filters import VacinaFilter
 from vacpass.models import Usuario, Cartao
 from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
-
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
 
 def index(request):
     if request.user.is_superuser:
@@ -53,19 +54,29 @@ class ConsultarVacina(DetailView):
 
 def gerenciar_dep(request):
     form = DependenteForm()
+    error_a = 0
     if request.POST:
         form = DependenteForm(request.POST)
         if form.is_valid():
-            cartao = Cartao()
-            cartao.save()
-            dependente = form.save(commit=False)
-            dependente.cartao = cartao
-            dependente.usuario = request.user.usuario
-            dependente.save()
+
+
+            stipo = form.cleaned_data['tipo']
+            sndoc = form.cleaned_data['ndocumento']
+            nd = Dependente.objects.filter(tipo=stipo, ndocumento=sndoc)
+            if nd.count() > 0:
+                form.add_error('ndocumento', 'Documento existente')
+                error_a = 1
+            if error_a == 0:
+                cartao = Cartao()
+                cartao.save()
+                dependente = form.save(commit=False)
+                dependente.cartao = cartao
+                dependente.usuario = request.user.usuario
+                dependente.save()
+
 
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
     return render(request, 'vacpass/gerenciarDep.html', {'form': form, 'dependentes': dependentes})
-
 
 def edit_dep(request):
     form = DependenteForm()
@@ -76,12 +87,23 @@ def edit_dep(request):
 class DepUpdate(UpdateView):
     model = Dependente
     template_name = 'vacpass/editDep.html'
-    fields = ['CPF', 'nome', 'certidao']
+    fields = ['tipo', 'nome', 'ndocumento']
     template_name_suffix = '_update_form'
 
     def get_success_url(self):
         messages.success(self.request, "O dependente foi editado")
         return reverse(gerenciar_dep)
+
+class DepExclude(DeleteView):
+    model = Dependente
+    template_name = 'vacpass/excluiDep.html'
+    fields = ['nome']
+
+
+    def get_success_url(self):
+        messages.success(self.request, "O dependente foi excluido")
+        return reverse(gerenciar_dep)
+
 
 
 class ContaUpdate(UpdateView):
