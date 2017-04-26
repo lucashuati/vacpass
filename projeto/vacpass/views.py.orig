@@ -26,9 +26,10 @@ def solicitar_vacina(request):
 
 
 def meu_cartao(request):
-    return render(request, 'vacpass/cartaoVacina.html', {})
+    pass
 
 
+<<<<<<< HEAD
 def buscar_vacina(request):
     filter = VacinaFilter(request.GET, Vacina.objects.all())
     table = VacinaTable(filter.qs)
@@ -50,6 +51,10 @@ class ConsultarVacina(DetailView):
         RequestConfig(self.request).configure(dosetable)
         context.update(dosetable=dosetable)
         return context
+=======
+def meu_cartao(request):
+    return render(request, 'vacpass/cartaoVacina.html', {})
+>>>>>>> front
 
 
 def gerenciar_dep(request):

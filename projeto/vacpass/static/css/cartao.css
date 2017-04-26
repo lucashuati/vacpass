@@ -1,0 +1,20 @@
+* {
+    webkit-box-sizing: content-box !important;
+    box-sizing: content-box !important;
+}
+#branding{
+    margin-top: 7px;
+}
+
+/* The heart of the matter */
+.testimonial-group > .row {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.testimonial-group > .row > .col-xs-3 {
+  display: inline-block;
+  float: none;
+}
+
+/* Decorations */
+.col-xs-3 { color: #fff; font-size: 48px; padding-bottom: 20px; padding-top: 18px; }
