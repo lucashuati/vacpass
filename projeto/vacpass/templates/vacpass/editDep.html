@@ -3,7 +3,9 @@
 {% block content %}
     <h2>Preencha os campos que deseja alterar, caso um campo esteja em branco, determina que sera mantido</h2>
     <form action="" method="post">{% csrf_token %}
-        {{ form.as_p }}
+        <table>
+            {{ form.as_table }}
+        </table>
         <input type="submit" value="Update" />
     </form>
 {% endblock %}

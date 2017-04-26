@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>Sua Conta</h3>
+    <h1>Sua Conta</h1>
     <table>
         <tbody>
             <tr>
@@ -32,7 +32,7 @@
     </table>
     <a href="../editconta/{{ request.user.pk }}"><input type="submit" value="Editar"></a>
     <a href=" {% url 'deleteconta' %}"><input type="submit" value="Excluir"></a>
-    <h3>Depentes</h3>
+    <h1><br>Criar depentes</h1>
     <form method="post" id="formdependente" action={% url "gerenciardependente" %}>
         {% csrf_token %}
         <table>
@@ -40,12 +40,24 @@
         </table>
         <input type="submit" value="Criar"/>
     </form>
+    <h1> <br>Dependentes </h1>
+<table>
+    <tr>
+        <td> <b>Nome</b></td>
+        <td> <b>Documento</b> </td>
+        <td> <b>Numero </b></td>
+        <td> <b>Editar </b></td>
+        <td> <b>Excluir</b> </td>
+    <tr>
 {% for dep in dependentes %}
-    <p><b>Nome</b> : {{ dep.nome }}</p>
-    <p><b>Documento</b> : {{ dep.tipo }}</p>
-    <p><b>Numero</b> : {{ dep.ndocumento }}</p>
-        <a id = 'ed' href = '{{ dep.get_absolute_url }}'> Editar </a>
-        <a id = 'exd' href = '{{ dep.get_url }}'> Excluir </a>
-    {% endfor %}
+     <tr>
 
+        <td> {{ dep.nome }}</td>
+        <td> {{ dep.tipo }}</td>
+        <td> {{ dep.ndocumento }}</td>
+         <td><a id = 'ed' href = '{{ dep.get_absolute_url }}'> Editar </a></td>
+         <td><a id = 'exd' href = '{{ dep.get_url }}'> Excluir </a></td>
+     </tr>
+    {% endfor %}
+</table>
 {% endblock %}

@@ -54,25 +54,15 @@ class ConsultarVacina(DetailView):
 
 def gerenciar_dep(request):
     form = DependenteForm()
-    error_a = 0
     if request.POST:
         form = DependenteForm(request.POST)
         if form.is_valid():
-
-
-            stipo = form.cleaned_data['tipo']
-            sndoc = form.cleaned_data['ndocumento']
-            nd = Dependente.objects.filter(tipo=stipo, ndocumento=sndoc)
-            if nd.count() > 0:
-                form.add_error('ndocumento', 'Documento existente')
-                error_a = 1
-            if error_a == 0:
-                cartao = Cartao()
-                cartao.save()
-                dependente = form.save(commit=False)
-                dependente.cartao = cartao
-                dependente.usuario = request.user.usuario
-                dependente.save()
+            cartao = Cartao()
+            cartao.save()
+            dependente = form.save(commit=False)
+            dependente.cartao = cartao
+            dependente.usuario = request.user.usuario
+            dependente.save()
 
 
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
@@ -86,8 +76,8 @@ def edit_dep(request):
 
 class DepUpdate(UpdateView):
     model = Dependente
+    form_class = DependenteForm
     template_name = 'vacpass/editDep.html'
-    fields = ['tipo', 'nome', 'ndocumento']
     template_name_suffix = '_update_form'
 
     def get_success_url(self):

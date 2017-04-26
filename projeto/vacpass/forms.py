@@ -45,6 +45,15 @@ class DependenteForm(ModelForm):
         model = Dependente
         fields = ['tipo', 'nome', 'ndocumento']
 
+    def clean(self):
+        error_a = 0
+        stipo = self.cleaned_data['tipo']
+        sndoc = self.cleaned_data['ndocumento']
+        nd = Dependente.objects.filter(tipo=stipo, ndocumento=sndoc)
+        if nd.count() > 0:
+            raise ValidationError('documento existente')
+
+        return self.cleaned_data
 class VacinaForm(ModelForm):
     class Meta:
         model = Vacina
