@@ -24,7 +24,7 @@ def gerenciar_vacina(request):
 
 
 def meu_cartao(request):
-    pass
+    return render(request, 'vacpass/cartaoVacina.html', {})
 
 
 def gerenciar_dep(request):
