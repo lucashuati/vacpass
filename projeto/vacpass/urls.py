@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='index', permanent=True)),
     url(r'^index/$', index, name='index'),
     url(r'^solicitarvacina/$', solicitar_vacina, name='solicitarvacina'),
+    url(r'^solicitacoes/$', solicitacoes, name='solicitacoes'),
     url(r'^vacinas/buscar/$', buscar_vacina, name='buscarvacina'),
     url(r'^vacinas/consultar/(?P<pk>\d+)/$', ConsultarVacina.as_view(), name='consultarvacina'),
     url(r'^meucartao/$', meu_cartao, name='meucartao'),

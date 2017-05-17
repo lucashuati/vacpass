@@ -14,14 +14,16 @@ from .forms import *
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 
+
 def index(request):
-    if request.user.is_superuser:
-        return redirect('/admin/')
-    else:
-        return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
+    return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
 
 
 def solicitar_vacina(request):
+    pass
+
+
+def solicitacoes(request):
     pass
 
 
@@ -68,6 +70,7 @@ def gerenciar_dep(request):
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
     return render(request, 'vacpass/gerenciarDep.html', {'form': form, 'dependentes': dependentes})
 
+
 def edit_dep(request):
     form = DependenteForm()
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
@@ -84,16 +87,15 @@ class DepUpdate(UpdateView):
         messages.success(self.request, "O dependente foi editado")
         return reverse(gerenciar_dep)
 
+
 class DepExclude(DeleteView):
     model = Dependente
     template_name = 'vacpass/excluiDep.html'
     fields = ['nome']
 
-
     def get_success_url(self):
         messages.success(self.request, "O dependente foi excluido")
         return reverse(gerenciar_dep)
-
 
 
 class ContaUpdate(UpdateView):
@@ -153,6 +155,7 @@ def editar_senha(request):
                 return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes})
 
     return render(request, 'vacpass/editPass.html', {'form': form})
+
 
 def editar_conta(request):
     form = EditarContaForm()
