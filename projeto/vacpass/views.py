@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, DetailView
 from django_tables2 import RequestConfig
+from django.core.mail import send_mail
 
 import constants
 from vacpass.filters import VacinaFilter
@@ -13,6 +14,9 @@ from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
+
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 def index(request):
     if request.user.is_superuser:
@@ -93,6 +97,7 @@ class DepExclude(DeleteView):
     def get_success_url(self):
         messages.success(self.request, "O dependente foi excluido")
         return reverse(gerenciar_dep)
+
 
 
 
@@ -226,3 +231,31 @@ def criar_conta(request):
             return render(request, 'registration/criarconta.html', {'form': form})
 
     return render(request, 'registration/criarconta.html', {'form': form})
+
+
+def recupera_senha(request) :
+    form = RecuperaSenha()
+    email_field = form.fields['email']
+    if request.POST:
+        form = RecuperaSenha(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            valid_email = User.objects.filter(email=email)
+            has_error = False
+            if not valid_email.exists():
+                form.add_error('email', 'Email nao cadastrado')
+                has_error = True
+            if not has_error:
+               #senha =  User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
+               senha_nova = 'aabb1234'
+               user = User.objects.get(email= email)
+               user.set_password(senha_nova)
+               user.save()
+               texto = 'Sua Nova senha gerada: ' + senha_nova + ' \n\nPara colocar a senha desejada, entre na aba alterar senha do seu perfil e siga os passos descritos\n\n Vacpass Company '
+               send_mail('Recuperacao de Senha', texto, settings.EMAIL_HOST_USER, [email])
+               messages.info(request, 'Nova senha enviada para seu e-mail')
+               return render(request, 'registration/login.html', {'form': AuthenticationForm()})
+
+        return render(request, 'vacpass/recuperaSenha.html', {'form': form})
+    else:
+        return render(request, 'vacpass/recuperaSenha.html', {'form': form})
