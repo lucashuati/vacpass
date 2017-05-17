@@ -1,4 +1,4 @@
-* {
+git * {
     webkit-box-sizing: content-box !important;
     box-sizing: content-box !important;
 }
@@ -17,4 +17,8 @@
 }
 
 /* Decorations */
-.col-xs-3 { color: #fff; font-size: 48px; padding-bottom: 20px; padding-top: 18px; }
+.col-xs-3 { text-align:left; color: #000; font-size: 25px; padding-bottom: 20px; padding-top: 18px; }
+
+.panel-body {
+    /*padding-bottom: 0px !important;*/
+}

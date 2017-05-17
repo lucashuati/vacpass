@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+    {% load static %}
 {% block headerextra %}
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -28,7 +28,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-3">2</div>
+            <div class="col-xs-3">
+                <div class="panel panel-primary ">
+                    <div class="panel-heading">Vacina Y</div>
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <a class="btn btn-danger"
+                                   style="float: right; padding: 2px; width: 20px; position: relative; top: -10px; right: -10px; ">X</a>
+                                <h3 style="margin: 0px 0px 10px 0px;">Dose X</h3>
+                                <p style="font-size: 15pt; font-family: 'Helvetica', sans-serif"><strong>Data:</strong> 01/03/2013</p>
+                                <p style="font-size: 15pt;"><strong>Vencimento:</strong> 01/03/2013</p>
+                                <a href="" class="btn btn-primary" style="color: white; float: right;">Renovar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-xs-3">3</div>
             <div class="col-xs-3">4</div>
             <div class="col-xs-3">5</div>
