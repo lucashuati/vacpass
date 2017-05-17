@@ -47,7 +47,6 @@ class Vacina(models.Model):
     disponibilidade = models.CharField(max_length=500, default="")
     proibitivos = models.CharField(max_length=500, default="")
     preco = models.FloatField(default=0)
-    cartao = models.ManyToManyField(Cartao, through="ControleVencimento")
 
     def doses(self):
         return DoseVacina.objects.filter(vacina=self)
@@ -59,20 +58,21 @@ class Vacina(models.Model):
         return self.nome
 
 
-class ControleVencimento(models.Model):
-    cartao = models.ForeignKey(Cartao, on_delete=models.CASCADE)
-    vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE)
-    data = models.DateField()
-    vencimento = models.DateField()
-
-    def __str__(self):
-        return self.vencimento
-
-
 class DoseVacina(models.Model):
     dose = models.IntegerField()
     idade = models.CharField(max_length=50)
     vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE)
+    duracao_meses = models.IntegerField()
+    cartao = models.ManyToManyField(Cartao, through="ControleVencimento")
 
     def __str__(self):
         return "dose {}: {} ".format(self.dose, self.idade)
+
+
+class ControleVencimento(models.Model):
+    cartao = models.ForeignKey(Cartao, on_delete=models.CASCADE)
+    dose = models.ForeignKey(DoseVacina, on_delete=models.CASCADE)
+    data = models.DateField()
+
+    def __str__(self):
+        return str(self.dose) + " Válido até " + str(self.data)
