@@ -8,11 +8,13 @@ from django_tables2 import RequestConfig
 
 import constants
 from vacpass.filters import VacinaFilter
-from vacpass.models import Usuario, Cartao
+from vacpass.models import *
 from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
+import datetime
+
 
 def index(request):
     if request.user.is_superuser:
@@ -26,7 +28,44 @@ def solicitar_vacina(request):
 
 
 def meu_cartao(request):
-    return render(request, 'vacpass/cartaoVacina.html', {})
+    usuario = Usuario.objects.get(django_user=request.user)
+    cartao = usuario.cartao
+    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+    all_vac = Vacina.objects.all()
+    vacinas = []
+
+    dose_dict = {}
+
+    formNew = NovaVacinaCartaoForm()
+    if request.POST:
+        formNew = NovaVacinaCartaoForm(request.POST)
+        if formNew.is_valid():
+            data_input = formNew.cleaned_data['data']
+            vacina_pk = formNew.cleaned_data['vacina']
+            vacina = Vacina.objects.get(pk=vacina_pk)
+            d = formNew.cleaned_data['data']['data']
+            dose = DoseVacina.objects.get(vacina=vacina, dose=1)
+            newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
+            newControle.save()
+
+    # Cria os vencimento
+    vacinas_user = ControleVencimento.objects.filter(cartao=cartao).order_by('dose')
+    for vac in vacinas_user:
+        delta_validade = datetime.timedelta(365 * vac.dose.duracao_meses / 12)
+        data_validade = vac.data + delta_validade
+
+        vacina_nome = vac.dose.vacina.nome
+        if (vacina_nome in dose_dict):
+            dose_dict[vacina_nome].append([vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y")])
+        else:
+            dose_dict[vacina_nome] = [[vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y")]]
+
+    for v in all_vac:
+        if not (v.nome in dose_dict):
+            vacinas.append(v)
+
+    return render(request, 'vacpass/cartaoVacina.html',
+                  {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': formNew})
 
 
 def buscar_vacina(request):
@@ -68,6 +107,7 @@ def gerenciar_dep(request):
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
     return render(request, 'vacpass/gerenciarDep.html', {'form': form, 'dependentes': dependentes})
 
+
 def edit_dep(request):
     form = DependenteForm()
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
@@ -84,16 +124,15 @@ class DepUpdate(UpdateView):
         messages.success(self.request, "O dependente foi editado")
         return reverse(gerenciar_dep)
 
+
 class DepExclude(DeleteView):
     model = Dependente
     template_name = 'vacpass/excluiDep.html'
     fields = ['nome']
 
-
     def get_success_url(self):
         messages.success(self.request, "O dependente foi excluido")
         return reverse(gerenciar_dep)
-
 
 
 class ContaUpdate(UpdateView):
@@ -150,9 +189,11 @@ def editar_senha(request):
                 request.user.save()
                 dependentes = Dependente.objects.filter(usuario=request.user.usuario)
                 messages.info(request, 'Sua senha foi atualizada')
-                return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes})
+                return render(request, 'vacpass/gerenciarDep.html',
+                              {'form': DependenteForm(), 'dependentes': dependentes})
 
     return render(request, 'vacpass/editPass.html', {'form': form})
+
 
 def editar_conta(request):
     form = EditarContaForm()
@@ -171,7 +212,7 @@ def editar_conta(request):
                 has_error = False
                 exits_email = User.objects.filter(email=email_new)
                 if exits_email.count() > 0:
-                    form.add_error('email','Email ja existe')
+                    form.add_error('email', 'Email ja existe')
                     has_error = True
                 if not request.user.check_password(pass_field):
                     form.add_error('password', 'Senha Incorreta')

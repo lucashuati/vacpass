@@ -68,6 +68,8 @@ class DoseVacina(models.Model):
     duracao_meses = models.IntegerField()
     cartao = models.ManyToManyField(Cartao, through="ControleVencimento")
 
+    ordering = ['vacina']
+
     def __str__(self):
         return "dose {}: {} ".format(self.dose, self.idade)
 

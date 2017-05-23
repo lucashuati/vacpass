@@ -1,24 +1,167 @@
-git * {
-    webkit-box-sizing: content-box !important;
-    box-sizing: content-box !important;
-}
-#branding{
-    margin-top: 7px;
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+@import url('http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css');
+
+html, body {
+    height: 100%;
 }
 
-/* The heart of the matter */
-.testimonial-group > .row {
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.testimonial-group > .row > .col-xs-3 {
-  display: inline-block;
-  float: none;
+p {
+    margin: 0 0 20px;
+    line-height: 1.5;
 }
 
-/* Decorations */
-.col-xs-3 { text-align:left; color: #000; font-size: 25px; padding-bottom: 20px; padding-top: 18px; }
+main {
+    min-width: 320px;
+    width: 100%;
+    padding: 0px 5px;
+    margin: 0 auto;
+    background: #fff;
+}
 
-.panel-body {
-    /*padding-bottom: 0px !important;*/
+section {
+    display: none;
+    padding: 20px 0 0;
+    border-top: 1px solid #ddd;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.cartao-input {
+    display: none;
+}
+
+label {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 25px;
+    font-weight: 600;
+    text-align: center;
+    color: #bbb;
+    border: 1px solid transparent;
+}
+
+label:before {
+    font-family: fontawesome;
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+label:before {
+    content: '\f1ae';
+}
+
+label[for*='1']:before {
+    content: '\f007';
+}
+
+label:hover {
+    color: #888;
+    cursor: pointer;
+}
+
+input:checked + label {
+    color: #555;
+    border: 1px solid #ddd;
+    border-top: 2px solid orange;
+    border-bottom: 1px solid #fff;
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab5:checked ~ #content5,
+#tab6:checked ~ #content6,
+#tab7:checked ~ #content7,
+#tab8:checked ~ #content8,
+#tab9:checked ~ #content9,
+#tab10:checked ~ #content10,
+#tab4:checked ~ #content4 {
+    display: block;
+}
+
+@media screen and (max-width: 650px) {
+    label {
+        font-size: 0;
+    }
+
+    label:before {
+        margin: 0;
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    label {
+        padding: 15px;
+    }
+}
+
+.vacina-column {
+    float: left;
+    width: 250px;
+    height: 500px;
+    padding-left: 25px;
+    /*border: 1px solid black;*/
+}
+
+.vacina-column h2 {
+    text-align: center;
+}
+
+.dose-box {
+    font-size: 15pt;
+    /*width: 250px;*/
+    /*height: 200px;*/
+    background-color: #417690;
+    /*border: 1px solid red;*/
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+
+}
+
+.dose-box ul {
+    padding: 25px;
+}
+
+.dose-box ul li {
+    list-style: none;
+}
+
+.dose-box ul li p {
+    color: #FFF;
+    font-size: 13pt;
+}
+
+.renovar {
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+    color: #FFF !important;
+    padding: 10px !important;
+    border: 2px solid #000 !important;
+    border-radius: 0px !important;
+    background-color: #417690 !important;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
+
+}
+
+#label-nova-vacina {
+    display: block;
+    padding: 15px 0px;
+}
+
+#label-nova-vacina:before {
+    content: '\f0fe';
+}
+
+#data-vacina:before {
+    content: '\f073';
+}
+
+#data-vacina {
+    padding-right: 5px;
 }
