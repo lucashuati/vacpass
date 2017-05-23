@@ -246,12 +246,12 @@ def recupera_senha(request) :
                 form.add_error('email', 'Email nao cadastrado')
                 has_error = True
             if not has_error:
-               #senha =  User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
-               senha_nova = 'aabb1234'
+               senha_nova =  User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
+              # senha_nova = 'aabb1234'
                user = User.objects.get(email= email)
                user.set_password(senha_nova)
                user.save()
-               texto = 'Sua Nova senha gerada: ' + senha_nova + ' \n\nPara colocar a senha desejada, entre na aba alterar senha do seu perfil e siga os passos descritos\n\n Vacpass Company '
+               texto = 'Geramos sua nova senha: ' + senha_nova + ' \n\nCaso deseje alterar para uma de sua preferencia, entre no seu perfil e clique na aba alterar senha seguindo os passos descritos.\n\n Vacpass Company 2017.'
                send_mail('Recuperacao de Senha', texto, settings.EMAIL_HOST_USER, [email])
                messages.info(request, 'Nova senha enviada para seu e-mail')
                return render(request, 'registration/login.html', {'form': AuthenticationForm()})
