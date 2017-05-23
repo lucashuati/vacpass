@@ -43,7 +43,6 @@ def meu_cartao(request):
             data_input = formNew.cleaned_data['data']
             vacina_pk = formNew.cleaned_data['vacina']
             vacina = Vacina.objects.get(pk=vacina_pk)
-            d = formNew.cleaned_data['data']['data']
             dose = DoseVacina.objects.get(vacina=vacina, dose=1)
             newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
             newControle.save()
@@ -102,7 +101,6 @@ def gerenciar_dep(request):
             dependente.cartao = cartao
             dependente.usuario = request.user.usuario
             dependente.save()
-
 
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
     return render(request, 'vacpass/gerenciarDep.html', {'form': form, 'dependentes': dependentes})

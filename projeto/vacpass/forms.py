@@ -47,7 +47,7 @@ class NovaVacinaCartaoForm(forms.Form):
         data_input = self.cleaned_data['data']
         if data_input > datetime.date.today():
             raise ValidationError('Esse dia ainda nem chegou amigao')
-        return self.cleaned_data
+        return self.cleaned_data['data']
 
 class DependenteForm(ModelForm):
     class Meta:

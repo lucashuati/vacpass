@@ -52,6 +52,9 @@
             <div class="vacina-column " style="float: left;">
                 <form method="post" action="{% url 'meucartao' %}">
                     {% csrf_token %}
+                {% if vacinas is emp %}
+
+                {% endif %}
                     <label id="label-nova-vacina" for="nova-vacina">
                         Adicione uma nova vacina
                         <br>
