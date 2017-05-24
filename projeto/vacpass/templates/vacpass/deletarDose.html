@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+
+</head>
+<body>
+{% if removida %}
+    Dose Removida
+    <a id="removido" onclick="window.top.location.reload();" href="#">Voltar</a>
+
+{% else %}
+    <form action="{% url 'deletardose' vacina dose %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="{{ form.dose.name }}" value="{{ dose }}">
+        <input type="hidden" name="{{ form.vacina.name }}" value="{{ vacina }}">
+        <input type="submit" value="Excluir">
+    </form>
+{% endif %}
+</body>
+</html>

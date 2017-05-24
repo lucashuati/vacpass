@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^deleteconta/', excluir_conta, name="deleteconta"),
     url(r'^editpass/', editar_senha, name="editpass"),
     url(r'^recuperarsenha/',recupera_senha, name="recuperasenha")
+    url(r'^deletardose/(?P<string>.+)/(?P<ndose>[0-9])/', deletar_dose, name="deletardose"),
 ]

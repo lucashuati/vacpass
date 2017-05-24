@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 
     {% block title %}<title>VacPass</title>{% endblock %}
@@ -8,8 +8,11 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/datapicker.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
     {% block headerextra %}{% endblock %}
 </head>
@@ -26,7 +29,7 @@
                     <a href="/">Home</a>
                     <a href="{% url 'gerenciardependente' %}">Gerenciar conta</a>
 
-                    <a href="{% url 'logout' %}?next={% url 'index' %}">git Sair</a>
+                    <a href="{% url 'logout' %}?next={% url 'index' %}">Sair</a>
                 </div>
             {% endif %}
         </div>

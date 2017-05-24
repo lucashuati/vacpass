@@ -54,6 +54,9 @@ class Vacina(models.Model):
     def doses(self):
         return DoseVacina.objects.filter(vacina=self)
 
+    def num_doses(self):
+        return len(self.doses())
+
     def get_absolute_url(self):
         return reverse('consultarvacina', args=[str(self.id)])
 
@@ -67,6 +70,8 @@ class DoseVacina(models.Model):
     vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE)
     duracao_meses = models.IntegerField()
     cartao = models.ManyToManyField(Cartao, through="ControleVencimento")
+
+    ordering = ['vacina']
 
     def __str__(self):
         return "dose {}: {} ".format(self.dose, self.idade)
