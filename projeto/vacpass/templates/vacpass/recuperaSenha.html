@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Insira o e-mail cadastrado no sistema : </h2>
+    <form method="post" action={% url 'recuperasenha' %}>
+        {% csrf_token %}
+        <table>
+           <tbody>
+           {% for field in form %}
+               <tr>
+                   <th>
+                       {{ field.label_tag }}
+                   </th>
+                   <td>
+                       {{ field }}
+                       <p>{{ field.errors }}</p>
+                   </td>
+               </tr>
+           {% endfor %}
+           </tbody>
+        </table>
+        <input type="submit" value="Recuperar Senha"/>
+    </form>
+
+{% endblock %}

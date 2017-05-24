@@ -64,3 +64,6 @@ class VacinaForm(ModelForm):
     disponibilidade = forms.CharField(max_length=500, widget=forms.Textarea, required=False)
     proibitivos = forms.CharField(max_length=500, widget=forms.Textarea, required=False, label='Contra-indicações e Precauções')
     preco = forms.FloatField
+
+class RecuperaSenha(forms.Form):
+    email = forms.EmailField(label='Email:', required=True)
