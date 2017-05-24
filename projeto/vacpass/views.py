@@ -27,6 +27,24 @@ def solicitar_vacina(request):
     pass
 
 
+def deletar_dose(request, string="empty", ndose = 0):
+    form = DeletaDoseForm()
+    sucess = False
+    if request.POST:
+        form = DeletaDoseForm(request.POST)
+        if form.is_valid():
+            nome = form.cleaned_data['vacina']
+            dose = form.cleaned_data['dose']
+            vacina = Vacina.objects.get(nome=nome)
+            d = DoseVacina.objects.get(dose=dose, vacina=vacina)
+            c = Usuario.objects.get(django_user=request.user).cartao
+            ControleVencimento.objects.get(dose=d,cartao=c).delete()
+            sucess = True
+
+    return render(request, 'vacpass/deletarDose.html',
+                  {'form': form, 'vacina': string, 'dose': ndose, 'removida': sucess})
+
+
 def meu_cartao(request):
     usuario = Usuario.objects.get(django_user=request.user)
     cartao = usuario.cartao
@@ -37,8 +55,11 @@ def meu_cartao(request):
     dose_dict = {}
 
     formNew = NovaVacinaCartaoForm()
+    formRenova = RenovaVacinaForm()
+
     if request.POST:
         formNew = NovaVacinaCartaoForm(request.POST)
+        formRenova = RenovaVacinaForm(request.POST)
         if formNew.is_valid():
             data_input = formNew.cleaned_data['data']
             vacina_pk = formNew.cleaned_data['vacina']
@@ -47,24 +68,39 @@ def meu_cartao(request):
             newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
             newControle.save()
 
+        if formRenova.is_valid():
+            dose = formRenova.cleaned_data['dose']
+            data_input = formRenova.cleaned_data['rdata']
+            vacina = formRenova.cleaned_data['rvacina']
+            vacina = Vacina.objects.get(nome=vacina)
+            dose = DoseVacina.objects.get(vacina=vacina, dose=dose)
+
+            newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
+            newControle.save()
+
     # Cria os vencimento
     vacinas_user = ControleVencimento.objects.filter(cartao=cartao).order_by('dose')
     for vac in vacinas_user:
-        delta_validade = datetime.timedelta(365 * vac.dose.duracao_meses / 12)
-        data_validade = vac.data + delta_validade
 
+        dias = 365 * vac.dose.duracao_meses / 12
+        delta_validade = datetime.timedelta(dias)
+        data_validade = vac.data + delta_validade
+        data_renovacao = vac.data + datetime.timedelta(dias * .9)
         vacina_nome = vac.dose.vacina.nome
-        if (vacina_nome in dose_dict):
-            dose_dict[vacina_nome].append([vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y")])
+        if vacina_nome in dose_dict:
+            dose_dict[vacina_nome].append([vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
+                                           data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.doses()])
         else:
-            dose_dict[vacina_nome] = [[vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y")]]
+            dose_dict[vacina_nome] = [[vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
+                                       data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.doses()]]
 
     for v in all_vac:
         if not (v.nome in dose_dict):
             vacinas.append(v)
 
     return render(request, 'vacpass/cartaoVacina.html',
-                  {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': formNew})
+                  {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': formNew,
+                   'formRenova': formRenova, 'horaAtual': datetime.date.today().strftime("%d/%m/%y")})
 
 
 def buscar_vacina(request):
