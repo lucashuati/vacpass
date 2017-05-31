@@ -28,17 +28,14 @@ def calcula_dict(cartao):
     dose_dict = {}
     for vac in vacinas_user:
 
-        dias = 365 * vac.dose.duracao_meses / 12
-        delta_validade = datetime.timedelta(dias)
-        data_validade = vac.data + delta_validade
-        data_renovacao = vac.data + datetime.timedelta(dias * .9)
+        data_validade = vac.validade()
         vacina_nome = vac.dose.vacina.nome
         if vacina_nome in dose_dict:
             dose_dict[vacina_nome].append([vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
-                                           data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.num_doses()])
+                                           vac.dose.vacina.num_doses()])
         else:
             dose_dict[vacina_nome] = [[vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
-                                       data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.num_doses()]]
+                                       vac.dose.vacina.num_doses()]]
 
     return dose_dict
 
@@ -103,7 +100,7 @@ def renova_vacina(request):
 
     return render(request, 'vacpass/cartaoVacina.html',
                   {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': NovaVacinaCartaoForm(),
-                   'formRenova': RenovaVacinaForm(), 'horaAtual': datetime.date.today().strftime("%d/%m/%y"),
+                   'formRenova': RenovaVacinaForm(),
                    'errorRenova': error})
 
 def nova_vacina(request):
