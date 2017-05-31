@@ -17,8 +17,46 @@ from django.urls import reverse_lazy
 import datetime
 
 
-#!/usr/bin/env python
+# !/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+#
+
+
+def calcula_dict(cartao):
+    vacinas_user = ControleVencimento.objects.filter(cartao=cartao).order_by('dose')
+    dose_dict = {}
+    for vac in vacinas_user:
+
+        dias = 365 * vac.dose.duracao_meses / 12
+        delta_validade = datetime.timedelta(dias)
+        data_validade = vac.data + delta_validade
+        data_renovacao = vac.data + datetime.timedelta(dias * .9)
+        vacina_nome = vac.dose.vacina.nome
+        if vacina_nome in dose_dict:
+            dose_dict[vacina_nome].append([vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
+                                           data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.num_doses()])
+        else:
+            dose_dict[vacina_nome] = [[vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
+                                       data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.num_doses()]]
+
+    return dose_dict
+
+
+# Calculo das novas vacinas de um usuario
+def calcula_novas_vacinas(dose_dict=False):
+    if not dose_dict:
+        pass
+
+    vacinas = []
+    all_vac = Vacina.objects.all()
+
+    for v in all_vac:
+        if not (v.nome in dose_dict):
+            vacinas.append(v)
+
+    return vacinas
+
 
 def index(request):
     return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
@@ -31,8 +69,76 @@ def solicitar_vacina(request):
 def solicitacoes(request):
     pass
 
+def renova_vacina(request):
+    usuario = Usuario.objects.get(django_user=request.user)
+    cartao = usuario.cartao
+    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
 
-def deletar_dose(request, string="empty", ndose = 0):
+    error = False
+    if request.POST:
+        form = RenovaVacinaForm(request.POST)
+
+        if form.is_valid():
+            data_input = form.cleaned_data['rdata']
+            vacina = form.cleaned_data['rvacina']
+            vacina = Vacina.objects.get(nome=vacina)
+
+            dose = form.cleaned_data['dose']
+            dose_ant = DoseVacina.objects.get(vacina=vacina,dose=dose-1)
+            dose = DoseVacina.objects.get(vacina=vacina,dose=dose)
+            data_anterior = ControleVencimento.objects.get(cartao=cartao,dose=dose_ant).data
+            if data_input > datetime.date.today():
+                error = 'Esta data ainda nao chegou'
+            if data_anterior > data_input:
+                error = 'Data anterior a ultima dose'
+            if not error:
+                newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
+                newControle.save()
+
+    if not error:
+        return redirect('meucartao')
+
+    dose_dict = calcula_dict(cartao)
+    vacinas = calcula_novas_vacinas(dose_dict)
+
+    return render(request, 'vacpass/cartaoVacina.html',
+                  {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': NovaVacinaCartaoForm(),
+                   'formRenova': RenovaVacinaForm(), 'horaAtual': datetime.date.today().strftime("%d/%m/%y"),
+                   'errorRenova': error})
+
+def nova_vacina(request):
+    usuario = Usuario.objects.get(django_user=request.user)
+    cartao = usuario.cartao
+    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+
+    error = False
+    if request.POST:
+        form = NovaVacinaCartaoForm(request.POST)
+
+        if form.is_valid():
+            data_input = form.cleaned_data['data']
+            vacina_pk = form.cleaned_data['vacina']
+            if data_input > datetime.date.today():
+                error = 'Esta data ainda nao chegou'
+            else:
+                vacina = Vacina.objects.get(pk=vacina_pk)
+                dose = DoseVacina.objects.get(vacina=vacina, dose=1)
+                newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
+                newControle.save()
+
+    if not error:
+        return redirect('meucartao')
+
+    dose_dict = calcula_dict(cartao)
+    vacinas = calcula_novas_vacinas(dose_dict)
+
+    return render(request, 'vacpass/cartaoVacina.html',
+                  {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': NovaVacinaCartaoForm(),
+                   'formRenova': RenovaVacinaForm(), 'horaAtual': datetime.date.today().strftime("%d/%m/%y"),
+                   'errorAdd': error})
+
+
+def deletar_dose(request, string="empty", ndose=0):
     form = DeletaDoseForm()
     sucess = False
     if request.POST:
@@ -43,7 +149,7 @@ def deletar_dose(request, string="empty", ndose = 0):
             vacina = Vacina.objects.get(nome=nome)
             d = DoseVacina.objects.get(dose=dose, vacina=vacina)
             c = Usuario.objects.get(django_user=request.user).cartao
-            ControleVencimento.objects.get(dose=d,cartao=c).delete()
+            ControleVencimento.objects.get(dose=d, cartao=c).delete()
             sucess = True
 
     return render(request, 'vacpass/deletarDose.html',
@@ -62,46 +168,21 @@ def meu_cartao(request):
     formNew = NovaVacinaCartaoForm()
     formRenova = RenovaVacinaForm()
 
-    if request.POST:
-        formNew = NovaVacinaCartaoForm(request.POST)
-        formRenova = RenovaVacinaForm(request.POST)
-        if formNew.is_valid():
-            data_input = formNew.cleaned_data['data']
-            vacina_pk = formNew.cleaned_data['vacina']
-            vacina = Vacina.objects.get(pk=vacina_pk)
-            dose = DoseVacina.objects.get(vacina=vacina, dose=1)
-            newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
-            newControle.save()
+    if formRenova.is_valid():
+        dose = formRenova.cleaned_data['dose']
+        data_input = formRenova.cleaned_data['rdata']
+        vacina = formRenova.cleaned_data['rvacina']
+        vacina = Vacina.objects.get(nome=vacina)
+        dose = DoseVacina.objects.get(vacina=vacina, dose=dose)
 
-        if formRenova.is_valid():
-            dose = formRenova.cleaned_data['dose']
-            data_input = formRenova.cleaned_data['rdata']
-            vacina = formRenova.cleaned_data['rvacina']
-            vacina = Vacina.objects.get(nome=vacina)
-            dose = DoseVacina.objects.get(vacina=vacina, dose=dose)
+        newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
+        newControle.save()
 
-            newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
-            newControle.save()
 
-    # Cria os vencimento
-    vacinas_user = ControleVencimento.objects.filter(cartao=cartao).order_by('dose')
-    for vac in vacinas_user:
+# Cria os vencimento
 
-        dias = 365 * vac.dose.duracao_meses / 12
-        delta_validade = datetime.timedelta(dias)
-        data_validade = vac.data + delta_validade
-        data_renovacao = vac.data + datetime.timedelta(dias * .9)
-        vacina_nome = vac.dose.vacina.nome
-        if vacina_nome in dose_dict:
-            dose_dict[vacina_nome].append([vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
-                                           data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.doses()])
-        else:
-            dose_dict[vacina_nome] = [[vac.dose, vac.data.strftime("%d/%m/%y"), data_validade.strftime("%d/%m/%y"),
-                                       data_renovacao.strftime("%d/%m/%y"), vac.dose.vacina.doses()]]
-
-    for v in all_vac:
-        if not (v.nome in dose_dict):
-            vacinas.append(v)
+    dose_dict = calcula_dict(cartao)
+    vacinas = calcula_novas_vacinas(dose_dict)
 
     return render(request, 'vacpass/cartaoVacina.html',
                   {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': formNew,
@@ -308,7 +389,7 @@ def criar_conta(request):
     return render(request, 'registration/criarconta.html', {'form': form})
 
 
-def recupera_senha(request) :
+def recupera_senha(request):
     form = RecuperaSenha()
     email_field = form.fields['email']
     if request.POST:
@@ -321,15 +402,16 @@ def recupera_senha(request) :
                 form.add_error('email', 'Email nao cadastrado')
                 has_error = True
             if not has_error:
-               senha_nova =  User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
-              # senha_nova = 'aabb1234'
-               user = User.objects.get(email= email)
-               user.set_password(senha_nova)
-               user.save()
-               texto = 'Geramos sua nova senha: ' + senha_nova + ' \n\nCaso deseje alterar para uma de sua preferencia, entre no seu perfil e clique na aba alterar senha seguindo os passos descritos.\n\n Vacpass Company 2017.'
-               send_mail('Recuperacao de Senha', texto, settings.EMAIL_HOST_USER, [email])
-               messages.info(request, 'Nova senha enviada para seu e-mail')
-               return render(request, 'registration/login.html', {'form': AuthenticationForm()})
+                senha_nova = User.objects.make_random_password(length=10,
+                                                               allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
+                # senha_nova = 'aabb1234'
+                user = User.objects.get(email=email)
+                user.set_password(senha_nova)
+                user.save()
+                texto = 'Geramos sua nova senha: ' + senha_nova + ' \n\nCaso deseje alterar para uma de sua preferencia, entre no seu perfil e clique na aba alterar senha seguindo os passos descritos.\n\n Vacpass Company 2017.'
+                send_mail('Recuperacao de Senha', texto, settings.EMAIL_HOST_USER, [email])
+                messages.info(request, 'Nova senha enviada para seu e-mail')
+                return render(request, 'registration/login.html', {'form': AuthenticationForm()})
 
         return render(request, 'vacpass/recuperaSenha.html', {'form': form})
     else:

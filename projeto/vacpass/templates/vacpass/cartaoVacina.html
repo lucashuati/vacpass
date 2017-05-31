@@ -59,10 +59,11 @@
                                 </li>
                             </ul>
                         </div>
-                        {% if forloop.last and d.4 < forloop.counter %}
+                        {% if forloop.last and d.4 > forloop.counter %}
+
                             {% if d.3 < horaAtual %}
                                 <div>
-                                    <form method="post" action="{% url 'meucartao' %}">
+                                    <form method="post" action="{% url 'renovavacina' %}">
                                         <div class="fieldWrapper">
                                             {% csrf_token %}
 
@@ -75,8 +76,9 @@
                                                 placeholder="Escolha a data da Vacina" type="text"
                                                 name={{ formRenova.rdata.name }} id="{{ formRenova.rdata.id_for_label }}"
                                                 class="datepicker" required>
-                                            {{ formRenova.data.errors }}
-                                            {{ formRenova.dose.errors }}
+                                            {% if errorRenova %}
+                                                {{ errorRenova }}
+                                            {% endif %}
                                         </div>
                                         <input class="renovar" type="submit" name="Renovar" value="Renovar">
                                     </form>
@@ -91,10 +93,10 @@
 
             {% if vacinas %}
                 <div class="vacina-column " style="float: left;">
-                    <form method="post" action="{% url 'meucartao' %}">
+                    <form method="post" action="{% url 'novavacina' %}">
                         {% csrf_token %}
 
-                        <label id="label-nova-vacina" for="nova-vacina">
+                        <label id="label-nova-vacina" for="{{ formNew.vacina.id_for_label }}">
                             Adicione uma nova vacina
                             <br>
                             <select required style="width: 100%;" name="{{ formNew.vacina.name }}"
@@ -111,9 +113,12 @@
 
                             <label id="data-vacina" for="{{ formNew.data.id_for_label }}"></label><input
                                 placeholder="Escolha a data da Vacina" type="text"
-                                name={{ formNew.data.name }} id="{{ formNew.data.id_for_label }}"
+                                name="{{ formNew.data.name }}" id="{{ formNew.data.id_for_label }}"
                                 class="datepicker" required>
-                            {{ formNew.data.errors }}
+                            {% if errorAdd %}
+                                {{ errorAdd }}
+
+                            {% endif %}
                         </div>
                         <input type="submit" class="renovar" value="Adicionar"/>
                     </form>
