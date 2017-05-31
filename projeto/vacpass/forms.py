@@ -47,11 +47,6 @@ class RenovaVacinaForm(forms.Form):
     dose = forms.IntegerField()
     rvacina = forms.CharField(max_length=100)
 
-    # def clean_dose(self):
-    #     dose_num = self.cleaned_data['dose']
-    #
-    #     return self.clean_data['dose']
-
     def clean_data(self):
         data_input = self.cleaned_data['data']
         if data_input > datetime.date.today():
@@ -63,17 +58,7 @@ class NovaVacinaCartaoForm(forms.Form):
     vacina = forms.CharField(widget=forms.Select(), label='Vacina', max_length=500)
     data = forms.DateField()
 
-    def clean(self):
-        if 'Renovar' in self.data:
-            raise ValidationError('Invalid Form')
 
-        return self.cleaned_data
-
-    def clean_data(self):
-        data_input = self.cleaned_data['data']
-        if data_input > datetime.date.today():
-            raise ValidationError('Esse dia ainda nem chegou amigao')
-        return self.cleaned_data['data']
 
 
 class DependenteForm(ModelForm):
