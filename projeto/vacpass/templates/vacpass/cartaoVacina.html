@@ -59,31 +59,28 @@
                                 </li>
                             </ul>
                         </div>
-                        {% if forloop.last and d.4 > forloop.counter %}
+                        {% if forloop.last and d.3 > forloop.counter %}
+                            <div>
+                                <form method="post" action="{% url 'renovavacina' %}">
+                                    <div class="fieldWrapper">
+                                        {% csrf_token %}
 
-                            {% if d.3 < horaAtual %}
-                                <div>
-                                    <form method="post" action="{% url 'renovavacina' %}">
-                                        <div class="fieldWrapper">
-                                            {% csrf_token %}
-
-                                            <input type="hidden" name="{{ formRenova.dose.name }}"
-                                                   value="{{ key|length|add:'1' }}">
-                                            <input type="hidden" name="{{ formRenova.rvacina.name }}" value="{{ foo }}">
-                                            <h3 style="text-align: center">Nova Dose</h3>
-                                            <label id="data-vacina"
-                                                   for="{{ formRenovar.rdata.id_for_label }}"></label><input
-                                                placeholder="Escolha a data da Vacina" type="text"
-                                                name={{ formRenova.rdata.name }} id="{{ formRenova.rdata.id_for_label }}"
-                                                class="datepicker" required>
-                                            {% if errorRenova %}
-                                                {{ errorRenova }}
-                                            {% endif %}
-                                        </div>
-                                        <input class="renovar" type="submit" name="Renovar" value="Renovar">
-                                    </form>
-                                </div>
-                            {% endif %}
+                                        <input type="hidden" name="{{ formRenova.dose.name }}"
+                                               value="{{ key|length|add:'1' }}">
+                                        <input type="hidden" name="{{ formRenova.rvacina.name }}" value="{{ foo }}">
+                                        <h3 style="text-align: center">Nova Dose</h3>
+                                        <label id="data-vacina"
+                                               for="{{ formRenovar.rdata.id_for_label }}"></label><input
+                                            placeholder="Escolha a data da Vacina" type="text"
+                                            name={{ formRenova.rdata.name }} id="{{ formRenova.rdata.id_for_label }}"
+                                            class="datepicker" required>
+                                        {% if errorRenova %}
+                                            {{ errorRenova }}
+                                        {% endif %}
+                                    </div>
+                                    <input class="renovar" type="submit" name="Renovar" value="Renovar">
+                                </form>
+                            </div>
                         {% endif %}
                     {% endfor %}
 

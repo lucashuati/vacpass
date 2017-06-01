@@ -2,3 +2,5 @@
 **/*.pyc
 *.pyc
 db.sqlite3
+celerybeat-schedule
+celerybeat.pid
