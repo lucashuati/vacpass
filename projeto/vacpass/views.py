@@ -352,8 +352,8 @@ def criar_conta(request):
     if request.POST:
         form = CriarContaForm(request.POST)
         if form.is_valid():
-            cartao = Cartao.objects.get(pk=1)
             nome = form.cleaned_data['nome']
+            cartao = Cartao(nome="cartao do "+nome)
             cpf = form.cleaned_data['cpf']
             senha = form.cleaned_data['senha']
             confirmacao = form.cleaned_data['confirmar_senha']
@@ -375,6 +375,7 @@ def criar_conta(request):
                 form.add_error('senha', 'Senha deve conter pelo menos seis digitos')
                 has_error = True
             if not has_error:
+                cartao.save()
                 user = User.objects.create_user(cpf, email, senha, first_name=nome)
                 new_user = Usuario(nascimento=nascimento, cartao=cartao, django_user=user)
                 new_user.save()
@@ -388,7 +389,6 @@ def criar_conta(request):
 
 def recupera_senha(request):
     form = RecuperaSenha()
-    email_field = form.fields['email']
     if request.POST:
         form = RecuperaSenha(request.POST)
         if form.is_valid():
@@ -399,9 +399,7 @@ def recupera_senha(request):
                 form.add_error('email', 'Email nao cadastrado')
                 has_error = True
             if not has_error:
-                senha_nova = User.objects.make_random_password(length=10,
-                                                               allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
-                # senha_nova = 'aabb1234'
+                senha_nova = User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
                 user = User.objects.get(email=email)
                 user.set_password(senha_nova)
                 user.save()

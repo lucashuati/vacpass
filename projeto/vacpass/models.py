@@ -83,6 +83,7 @@ class ControleVencimento(models.Model):
     cartao = models.ForeignKey(Cartao, on_delete=models.CASCADE)
     dose = models.ForeignKey(DoseVacina, on_delete=models.CASCADE)
     data = models.DateField()
+    avisado = models.BooleanField(default=False)
 
     def validade(self):
         dias = 365 * self.dose.duracao_meses / 12
@@ -91,6 +92,9 @@ class ControleVencimento(models.Model):
 
     def dias_para_renovacao(self):
         return self.validade() - datetime.date.today()
+
+    def vacina(self):
+        return self.dose.vacina
 
     def __str__(self):
         return str(self.dose) + " Válido até " + str(self.data)
