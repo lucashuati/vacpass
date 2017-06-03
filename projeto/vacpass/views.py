@@ -62,6 +62,7 @@ def solicitar_vacina(request):
 def solicitacoes(request):
     pass
 
+
 def renova_vacina(request):
     usuario = Usuario.objects.get(django_user=request.user)
     cartao = usuario.cartao
@@ -98,6 +99,7 @@ def renova_vacina(request):
                   {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': NovaVacinaCartaoForm(),
                    'formRenova': RenovaVacinaForm(),
                    'errorRenova': error})
+
 
 def nova_vacina(request):
     usuario = Usuario.objects.get(django_user=request.user)

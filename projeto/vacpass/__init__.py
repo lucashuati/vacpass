@@ -1,2 +1,1 @@
-from . import signalactions
-from . import tasks
+default_app_config = 'vacpass.apps.VacpassConfig'

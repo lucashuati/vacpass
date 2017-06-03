@@ -2,6 +2,8 @@ from celery import Celery
 from django.core.mail import send_mail
 from projeto import settings
 
+from vacpass.models import Usuario
+
 app = Celery()
 
 
@@ -20,7 +22,6 @@ def gerar_texto_proximidade_vencimento(sujeito, vacinas):
 
 @app.task
 def avisa_proximidade_vacinas():
-    from vacpass.models import Usuario
     usuarios_avisados = []
     for u in Usuario.objects.all():
         c = u.cartao
