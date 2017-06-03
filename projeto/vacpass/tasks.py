@@ -25,10 +25,7 @@ def avisa_proximidade_vacinas():
     usuarios_avisados = []
     for u in Usuario.objects.all():
         c = u.cartao
-        vacinas_por_vencer = []
-        for v in c.controlevencimento_set.all():
-            if not v.avisado and v.dias_para_renovacao().days < 30:
-                vacinas_por_vencer.append(v)
+        vacinas_por_vencer = [v for v in c.controlevencimento_set.all() if not v.avisado and v.dias_para_renovacao().days < 30]
         if vacinas_por_vencer:
             texto = gerar_texto_proximidade_vencimento(u.django_user.first_name, vacinas_por_vencer)
             assunto = 'VacPass - Aviso de proximidade de vencimento de vacina'
