@@ -1,20 +1,16 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.forms import *
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import UpdateView, DetailView
-from django_tables2 import RequestConfig
 from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.views.generic import UpdateView, DetailView
+from django.views.generic.edit import DeleteView
+from django_tables2 import RequestConfig
 
 import constants
 from vacpass.filters import VacinaFilter
-from vacpass.models import *
 from vacpass.tables import VacinaTable, DoseTable
 from .forms import *
-from django.views.generic.edit import DeleteView
-from django.urls import reverse_lazy
-import datetime
 
 
 # !/usr/bin/env python
@@ -388,9 +384,9 @@ def criar_conta(request):
 
 
 def recupera_senha(request):
-    form = RecuperaSenha()
+    form = RecuperaSenhaForm()
     if request.POST:
-        form = RecuperaSenha(request.POST)
+        form = RecuperaSenhaForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             valid_email = User.objects.filter(email=email)

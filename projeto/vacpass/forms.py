@@ -35,12 +35,18 @@ class EditPassForm(forms.Form):
     senha = forms.CharField(label='Senha Antiga:', widget=forms.PasswordInput())
 
 
+class RecuperaSenhaForm(forms.Form):
+    email = forms.EmailField(label='Email:', required=True)
+
+
 class ExcluirContaForm(forms.Form):
     senha = forms.CharField(label='Senha:', widget=forms.PasswordInput())
+
 
 class DeletaDoseForm(forms.Form):
     dose = forms.IntegerField()
     vacina = forms.CharField()
+
 
 class RenovaVacinaForm(forms.Form):
     rdata = forms.DateField()
@@ -59,15 +65,12 @@ class NovaVacinaCartaoForm(forms.Form):
     data = forms.DateField()
 
 
-
-
 class DependenteForm(ModelForm):
     class Meta:
         model = Dependente
         fields = ['tipo', 'nome', 'ndocumento']
 
     def clean(self):
-        error_a = 0
         stipo = self.cleaned_data['tipo']
         sndoc = self.cleaned_data['ndocumento']
         nd = Dependente.objects.filter(tipo=stipo, ndocumento=sndoc).exclude(pk=self.instance.id)
@@ -90,5 +93,14 @@ class VacinaForm(ModelForm):
                                   label='Contra-indicações e Precauções')
     preco = forms.FloatField
 
-class RecuperaSenha(forms.Form):
-    email = forms.EmailField(label='Email:', required=True)
+
+class DoseForm(forms.ModelForm):
+    class Meta:
+        model = DoseVacina
+        exclude = ['vacina', 'cartao']
+
+    def clean_duracao_meses(self):
+        data = self.cleaned_data['duracao_meses']
+        if data < 1:
+            raise forms.ValidationError('A duração da dose deve se de no mínimo um mês')
+        return data

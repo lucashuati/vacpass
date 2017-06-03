@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from vacpass.forms import VacinaForm
+from vacpass.forms import VacinaForm, DoseForm
 from vacpass.models import Usuario, Vacina, DoseVacina
 
 
@@ -10,6 +10,7 @@ class UsuariosAdmin(admin.ModelAdmin):
 
 
 class DoseInline(admin.TabularInline):
+    form = DoseForm
     model = DoseVacina
     extra = 0
 
