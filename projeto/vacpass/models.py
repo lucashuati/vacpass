@@ -84,6 +84,7 @@ class ControleVencimento(models.Model):
     dose = models.ForeignKey(DoseVacina, on_delete=models.CASCADE)
     data = models.DateField()
     avisado = models.BooleanField(default=False)
+    dias_para_notificacao = 30
 
     def validade(self):
         dias = 365 * self.dose.duracao_meses / 12
