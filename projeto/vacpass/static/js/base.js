@@ -18,25 +18,23 @@ $(document).ready(function () {
         if (e.keyCode == 8)
             $('element').trigger('keypress');
     });
-    // $("input").attr('title','Deu erro');
 
-    //$("#id_username, #id_cpf").mask('000.000.000-00', {reverse: true});// Get the modal
-    var modal = $('#myModal');
-    console.log("teste");
-    // Get the button that opens the modal
-    var btn = $('.delete');
-
-// Get the <span> element that closes the modal
-    var span = $(".close");
-
-// When the user clicks on the button, open the modal
-
-    btn.click(function () {
+    // When the user clicks on the button, open the modal
+    $('.abremodal').click(function () {
         $(this).next().show();
     });
 
-// When the user clicks on <span> (x), close the modal
-     span.click(function () {
+    // When the user clicks on <span> (x), close the modal
+     $(".close").click(function () {
         $(this).parent().parent().hide();
     });
 });
+
+//Estas funções estão a ser usadas em views.py. Não deixe o pycharm lhe enganar
+function fecha_modal(){
+    $(".close").trigger("click")
+}
+
+function adiciona_mensagem(classe, mensagem){
+    $(".messagelist").append($("<li>").attr('class', classe).text(mensagem));
+}

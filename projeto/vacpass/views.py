@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.forms import *
 from django.core.mail import send_mail
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.response import TemplateResponse
 from django.views.generic import UpdateView, DetailView
 from django.views.generic.edit import DeleteView
 from django_tables2 import RequestConfig
@@ -57,6 +59,26 @@ def index(request):
 
 def solicitar_vacina(request):
     pass
+
+
+def solicitar_revisao(request, vacina_pk):
+    vacina = Vacina.objects.get(id=vacina_pk)
+    form = SolicitacaoRevisaoForm(request.POST or None)
+    extra_script = ''
+    if request.POST:
+        if form.is_valid():
+            texto = form.cleaned_data['texto']
+            solicitante = request.user.usuario
+            revisao = Solicitacao(texto=texto, vacina=vacina, solicitante=solicitante)
+            revisao.save()
+            extra_script = 'window.top.fecha_modal(); window.top.adiciona_mensagem("{}", "{}")'.format(
+                "info",
+                "Sua sugestão foi recebida e será avaliada por um de nossos colaboradores. Aguarde contato por email."
+            )
+            extra_script = mark_safe(extra_script)
+
+    context = {'form': form, 'vacina': vacina, 'extra_script': extra_script}
+    return render(request, 'vacpass/vacina/solicitarRevisao.html', context)
 
 
 def solicitacoes(request):
