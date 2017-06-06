@@ -99,3 +99,14 @@ class ControleVencimento(models.Model):
 
     def __str__(self):
         return str(self.dose) + " Válido até " + str(self.data)
+
+
+class Solicitacao(models.Model):
+    texto = models.TextField()
+    datahora = models.DateTimeField(auto_now_add=True)
+    vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE, null=True)
+    solicitante = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+    def is_melhoria_vacina(self):
+        return self.vacina is not None
+

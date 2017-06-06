@@ -104,3 +104,19 @@ class DoseForm(forms.ModelForm):
         if data < 1:
             raise forms.ValidationError('A duração da dose deve se de no mínimo um mês')
         return data
+
+
+class SolicitacaoRevisaoForm(forms.Form):
+
+    texto = forms.CharField(required=True, max_length=512, widget=forms.Textarea(attrs={
+        'cols': '80',
+        'rows': '5',
+        'style': "resize:none",
+        'placeholder': 'Descreva brevemente a sugestão de melhoria'
+    }))
+
+    def clean_texto(self):
+        data = self.cleaned_data['texto']
+        if len(data) == 0:
+            raise forms.ValidationError('Preencha a solicitação')
+        return data
