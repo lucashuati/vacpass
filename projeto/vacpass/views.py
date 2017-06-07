@@ -100,9 +100,9 @@ def renova_vacina(request):
             vacina = Vacina.objects.get(nome=vacina)
 
             dose = form.cleaned_data['dose']
-            dose_ant = DoseVacina.objects.get(vacina=vacina,dose=dose-1)
-            dose = DoseVacina.objects.get(vacina=vacina,dose=dose)
-            data_anterior = ControleVencimento.objects.get(cartao=cartao,dose=dose_ant).data
+            dose_ant = DoseVacina.objects.get(vacina=vacina, dose=dose-1)
+            dose = DoseVacina.objects.get(vacina=vacina, dose=dose)
+            data_anterior = ControleVencimento.objects.get(cartao=cartao, dose=dose_ant).data
             if data_input > datetime.date.today():
                 error = 'Esta data ainda nao chegou'
             if data_anterior > data_input:

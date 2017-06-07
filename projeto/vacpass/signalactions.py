@@ -3,7 +3,7 @@ from django.contrib.auth import user_logged_in
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from vacpass.models import ControleVencimento
+from vacpass.models import ControleVencimento, DoseVacina
 
 
 @receiver(user_logged_in)
@@ -21,7 +21,14 @@ def login_action(sender, user, request, **kwargs):
 
 
 @receiver(pre_save, sender=ControleVencimento)
-def novo_controle_vencimento_action(sender, *args, **kwargs):
-    instance = kwargs['instance']
+def novo_controle_vencimento_action(sender, instance, *args, **kwargs):
     if not ControleVencimento.objects.filter(id=instance.id).exists() and instance.dias_para_renovacao().days < 0:
         instance.avisado = True
+
+
+@receiver(pre_save, sender=DoseVacina)
+def auto_increment_dose(sender, instance, *args, **kwargs):
+    if not DoseVacina.objects.filter(id=instance.id):
+        qs = DoseVacina.objects.filter(vacina=instance.vacina)
+        proxima_dose = qs.latest('dose').dose + 1 if qs.exists() else 0
+        instance.dose = proxima_dose

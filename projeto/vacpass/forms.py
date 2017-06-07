@@ -97,7 +97,7 @@ class VacinaForm(ModelForm):
 class DoseForm(forms.ModelForm):
     class Meta:
         model = DoseVacina
-        exclude = ['vacina', 'cartao']
+        exclude = ['dose', 'vacina', 'cartao']
 
     def clean_duracao_meses(self):
         data = self.cleaned_data['duracao_meses']
