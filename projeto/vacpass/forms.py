@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import datetime
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -107,7 +106,6 @@ class DoseForm(forms.ModelForm):
 
 
 class SolicitacaoRevisaoForm(forms.Form):
-
     texto = forms.CharField(required=True, max_length=512, widget=forms.Textarea(attrs={
         'cols': '80',
         'rows': '5',
@@ -115,8 +113,13 @@ class SolicitacaoRevisaoForm(forms.Form):
         'placeholder': 'Descreva brevemente a sugestão de melhoria'
     }))
 
-    def clean_texto(self):
-        data = self.cleaned_data['texto']
-        if len(data) == 0:
-            raise forms.ValidationError('Preencha a solicitação')
-        return data
+
+class RespostaSolicitacaoForm(forms.Form):
+    nao_pendente = [x for x in Solicitacao.STATUS if x[0] != Solicitacao.PENDENTE]
+    situacao = forms.ChoiceField(choices=nao_pendente, label="Nova situação:", initial=1)
+    texto = forms.CharField(required=True, label="", widget=forms.Textarea(attrs={
+        'cols': '80',
+        'rows': '10',
+        'style': "resize:none",
+        'placeholder': 'Resposta para o solicitante'
+    }))

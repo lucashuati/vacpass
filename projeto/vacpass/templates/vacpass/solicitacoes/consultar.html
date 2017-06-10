@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if solicitacao.is_revisao %}
+        <h1>Solicitação de revisão da vacina {{ solicitacao.vacina }}</h1>
+    {% else %}
+        <h1>Solicitação de adição da vacina {{ solicitacao.vacina }}</h1>
+    {% endif %}
+
+    <h2>Data e hora da solicitação</h2>
+    <p>{{ solicitacao.datahora }}</p>
+
+    <h2>Usuário solicitante</h2>
+    <p>{{ solicitacao.solicitante }}</p>
+
+    <h2>Descrição</h2>
+    <p>{{ solicitacao.texto }}</p>
+
+    <h2>Estado da solicitação</h2>
+    <p>{{ solicitacao.get_status_display }}</p>
+
+    {% if solicitacao.status == solicitacao.PENDENTE %}
+        <h2>Responder solicitação</h2>
+        <form action="{% url 'consultarsolicitacao' solicitacao.id %}" method="post" id="atualizasolicitacao">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field.label }}
+                {{ field }}
+                {{ field.errors }}
+                <br>
+            {% endfor %}
+            <input type="submit" value="Submeter"/>
+        </form>
+    {% else %}
+        <h2>Reabrir solicitação</h2>
+        <a href={% url "reabrirsolicitacao" solicitacao.id %}>
+            <input type="button" value="Reabrir"/>
+        </a>
+    {% endif %}
+{% endblock %}
