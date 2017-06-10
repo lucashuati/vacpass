@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+    <h1>Solicitações em aberto</h1>
+{#    <form action="" method="get">#}
+{#        {{ filter.form.as_p }}#}
+{#        <input type="submit" />#}
+{#    </form>#}
+
+    {% render_table pendentes_table %}
+
+    <h1>Solicitações resolvidas</h1>
+    {% render_table resolvidas_table %}
+{% endblock %}

@@ -46,7 +46,7 @@ class Dependente(models.Model):
 
 
 class Vacina(models.Model):
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50, unique=True)
     funcionalidade = models.CharField(max_length=500, default="")
     publico_alvo = models.CharField(max_length=500, default="")
     disponibilidade = models.CharField(max_length=500, default="")
@@ -101,12 +101,20 @@ class ControleVencimento(models.Model):
         return str(self.dose) + " Válido até " + str(self.data)
 
 
+
+
 class Solicitacao(models.Model):
+    PENDENTE = 1
+    RESOLVIDO = 2
+
     texto = models.TextField()
     datahora = models.DateTimeField(auto_now_add=True)
-    vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE, null=True)
+    vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE, null=True, to_field='nome')
     solicitante = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    status = models.IntegerField(default=PENDENTE, choices=((PENDENTE, "Pendente"), (RESOLVIDO, "Resolvido")))
 
-    def is_melhoria_vacina(self):
-        return self.vacina is not None
+    def is_revisao(self):
+        return Vacina.objects.filter(nome=self.vacina_id).exists()
 
+    def nome_vacina(self):
+        return self.vacina_id

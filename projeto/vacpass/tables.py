@@ -1,10 +1,17 @@
-from django_tables2 import tables
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from django.views.generic import RedirectView
+from django_tables2 import tables, A
+from django_tables2.utils import Accessor
 
-from vacpass.models import Vacina, DoseVacina
+from vacpass.models import Vacina, DoseVacina, Solicitacao
 
 
 def truncar(long_str):
-    return long_str[:20]+'...'
+    if len(long_str) > 23:
+        return long_str[:20]+'...'
+    else:
+        return long_str
 
 
 class VacinaTable(tables.Table):
@@ -36,4 +43,23 @@ class VacinaTable(tables.Table):
 class DoseTable(tables.Table):
     class Meta:
         model = DoseVacina
-        exclude = ['id','vacina']
+        exclude = ['id', 'vacina']
+
+
+class SolicitacaoTable(tables.Table):
+    class Meta:
+        model = Solicitacao
+        exclude = ['id', 'status']
+    vacina = tables.columns.Column(accessor='nome_vacina')
+    solicitante = tables.columns.LinkColumn(args=[Accessor('solicitante.id')], viewname='admin:vacpass_usuario_change')
+    tipo = tables.columns.BooleanColumn(accessor='is_revisao', yesno='Revisão,Nova vacina')
+
+    def render_texto(self, record):
+        return truncar(record.texto)
+
+    def render_vacina(self, record):
+        nome = record.nome_vacina()
+        if Vacina.objects.filter(nome=nome):
+            return mark_safe('<a href={}>{}</a>'.format(reverse('consultarvacina', args=[record.vacina.id]), nome))
+        else:
+            return nome

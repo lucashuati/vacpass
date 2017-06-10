@@ -11,7 +11,7 @@ from django_tables2 import RequestConfig
 
 import constants
 from vacpass.filters import VacinaFilter
-from vacpass.tables import VacinaTable, DoseTable
+from vacpass.tables import VacinaTable, DoseTable, SolicitacaoTable
 from .forms import *
 
 
@@ -82,7 +82,11 @@ def solicitar_revisao(request, vacina_pk):
 
 
 def solicitacoes(request):
-    pass
+    pendentes_table = SolicitacaoTable(Solicitacao.objects.filter(status=Solicitacao.PENDENTE))
+    resolvidas_table = SolicitacaoTable(Solicitacao.objects.filter(status=Solicitacao.RESOLVIDO))
+    RequestConfig(request).configure(pendentes_table)
+    context = {'pendentes_table': pendentes_table, 'resolvidas_table': resolvidas_table}
+    return render(request, 'vacpass/solicitacoes/solicitacoes.html', context)
 
 
 def renova_vacina(request):
