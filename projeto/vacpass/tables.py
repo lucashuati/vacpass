@@ -1,7 +1,6 @@
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.views.generic import RedirectView
-from django_tables2 import tables, A
+from django_tables2 import tables
 from django_tables2.utils import Accessor
 
 from vacpass.models import Vacina, DoseVacina, Solicitacao
@@ -49,17 +48,17 @@ class DoseTable(tables.Table):
 class SolicitacaoTable(tables.Table):
     class Meta:
         model = Solicitacao
-        exclude = ['id', 'status']
     vacina = tables.columns.Column(accessor='nome_vacina')
-    solicitante = tables.columns.LinkColumn(args=[Accessor('solicitante.id')], viewname='admin:vacpass_usuario_change')
+    solicitante = tables.columns.LinkColumn(viewname='admin:vacpass_usuario_change', args=[Accessor('solicitante.id')])
     tipo = tables.columns.BooleanColumn(accessor='is_revisao', yesno='Revisão,Nova vacina')
+    status = tables.columns.LinkColumn(accessor='status', viewname='consultarsolicitacao', args=[Accessor('id')])
 
     def render_texto(self, record):
         return truncar(record.texto)
 
     def render_vacina(self, record):
         nome = record.nome_vacina()
-        if Vacina.objects.filter(nome=nome):
+        if Vacina.objects.filter(nome=nome).exists():
             return mark_safe('<a href={}>{}</a>'.format(reverse('consultarvacina', args=[record.vacina.id]), nome))
         else:
             return nome

@@ -1,7 +1,7 @@
 from celery import Celery
 from django.core.mail import send_mail
-from projeto import settings
 
+from projeto import settings
 from vacpass.models import Usuario
 
 app = Celery()

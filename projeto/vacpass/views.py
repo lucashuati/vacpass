@@ -2,15 +2,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.forms import *
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.template.response import TemplateResponse
+from django.views import View
 from django.views.generic import UpdateView, DetailView
 from django.views.generic.edit import DeleteView
 from django_tables2 import RequestConfig
 
 import constants
-from vacpass.filters import VacinaFilter
+from vacpass.filters import *
 from vacpass.tables import VacinaTable, DoseTable, SolicitacaoTable
 from .forms import *
 
@@ -82,11 +81,69 @@ def solicitar_revisao(request, vacina_pk):
 
 
 def solicitacoes(request):
-    pendentes_table = SolicitacaoTable(Solicitacao.objects.filter(status=Solicitacao.PENDENTE))
-    resolvidas_table = SolicitacaoTable(Solicitacao.objects.filter(status=Solicitacao.RESOLVIDO))
-    RequestConfig(request).configure(pendentes_table)
-    context = {'pendentes_table': pendentes_table, 'resolvidas_table': resolvidas_table}
+    pendentes_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.filter(status=Solicitacao.PENDENTE), id_formulario=1)
+    if not pendentes_filter.qs.exists():
+        messages.warning(request, constants.noresult)
+    pendentes_table = SolicitacaoTable(pendentes_filter.qs)
+    RequestConfig(request, paginate={'per_page': 10}).configure(pendentes_table)
+
+    resolvidas_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.exclude(status=Solicitacao.PENDENTE), id_formulario=2)
+    if not resolvidas_filter.qs.exists():
+        messages.warning(request, constants.noresult)
+    resolvidas_table = SolicitacaoTable(resolvidas_filter.qs)
+    RequestConfig(request, paginate={'per_page': 10}).configure(resolvidas_table)
+
+    context = {'pendentes_filter': pendentes_filter, 'resolvidas_filter':resolvidas_filter, 'pendentes_table': pendentes_table, 'resolvidas_table': resolvidas_table}
     return render(request, 'vacpass/solicitacoes/solicitacoes.html', context)
+
+
+class ConsultaSolicitacao(View):
+    form_class = RespostaSolicitacaoForm
+    template_name = 'vacpass/solicitacoes/consultar.html'
+
+    def gerar_texto_email(self, solicitante, respondente, resposta, solicitacao):
+        tipo_solicitacao = "revisão para a vacina {}" if solicitacao.is_revisao() else "nova vacina ({})"
+        tipo_solicitacao = tipo_solicitacao.format(solicitacao.vacina_id)
+        texto = "Honorável {},\n\n".format(solicitante)
+        texto += "Sua solicitação de {} foi respondida. Segue a resposta:\n".format(tipo_solicitacao)
+        texto += "{}\nResposta escrita por {}.\n".format(resposta, respondente)
+        texto += "A situação da solicitação agora é {}.".format(solicitacao.get_status_display())
+        texto += "\n\nAtenciosamente, \nVacPass"
+        return texto
+
+    def post(self, request, solicitacao_pk):
+        form = self.form_class(request.POST)
+        solicitacao = Solicitacao.objects.get(id=solicitacao_pk)
+        if form.is_valid():
+            solicitante_user = solicitacao.solicitante.django_user
+            texto = self.gerar_texto_email(
+                solicitante_user.first_name,
+                request.user.first_name,
+                form.cleaned_data['texto'],
+                solicitacao
+            )
+            assunto = 'VacPass - Aviso de resposta de solicitação'
+            send_mail(assunto, texto, settings.EMAIL_HOST_USER, [solicitante_user.email])
+            solicitacao.status = form.cleaned_data['situacao']
+            solicitacao.save()
+            messages.success(request, "Solicitação {} foi respondida com sucesso.".format(solicitacao_pk))
+            return redirect(reverse(solicitacoes))
+
+    def get(self, request, solicitacao_pk):
+        form = self.form_class()
+        solicitacao = Solicitacao.objects.get(id=solicitacao_pk)
+        return render(request, self.template_name, {'form': form, 'solicitacao': solicitacao})
+
+
+def reabrir_solicitacao(request, solicitacao_pk):
+    solicitacao = Solicitacao.objects.get(id=solicitacao_pk)
+    if solicitacao.status != Solicitacao.PENDENTE:
+        messages.success(request, "Solicitação {} foi reaberta.".format(solicitacao_pk))
+        solicitacao.status = Solicitacao.PENDENTE
+        solicitacao.save()
+    else:
+        messages.warning(request, "Solicitação {} já estava aberta.".format(solicitacao_pk))
+    return redirect("consultarsolicitacao", solicitacao_pk)
 
 
 def renova_vacina(request):
@@ -280,9 +337,6 @@ class ContaUpdate(UpdateView):
     model = User
     fields = ['first_name', 'email']
     template_name_suffix = '_update_form'
-
-    def form_valid(self, form):
-        return super(ContaUpdate, self).form_valid(form)
 
     def get_success_url(self):
         return '../gerenciardependente/'
