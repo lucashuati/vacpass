@@ -39,7 +39,7 @@ class Dependente(models.Model):
         return reverse('editdep', args=[str(self.id)])
 
     def get_url(self):
-        return reverse('excluidep', args = [str(self.id)])
+        return reverse('excluidep', args=[str(self.id)])
 
     def __str__(self):
         return self.nome
@@ -110,7 +110,7 @@ class Solicitacao(models.Model):
         (RESOLVIDO, "Resolvido"),
         (NEGADA, "Negada")
     )
-
+    recomendacao = models.CharField(max_length=25, null=True)
     texto = models.TextField()
     datahora = models.DateTimeField(auto_now_add=True)
     vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE, null=True, to_field='nome')

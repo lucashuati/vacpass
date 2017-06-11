@@ -123,3 +123,16 @@ class RespostaSolicitacaoForm(forms.Form):
         'style': "resize:none",
         'placeholder': 'Resposta para o solicitante'
     }))
+
+
+class RecomedacaoForm(forms.Form):
+    vacina = forms.CharField(max_length=25)
+    texto = forms.CharField(required=True, label="Mensagem", widget=forms.Textarea(attrs={
+        'cols': '80',
+        'rows': '10',
+        'style': "resize:none",
+        'placeholder': 'Descreva brevemente sua o porque da sua solicitaçao de nova vacina'
+    }))
+
+
+

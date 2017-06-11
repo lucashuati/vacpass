@@ -80,20 +80,40 @@ def solicitar_revisao(request, vacina_pk):
     return render(request, 'vacpass/vacina/solicitarRevisao.html', context)
 
 
+def recomendacoes(request):
+    form = RecomedacaoForm()
+    template = 'vacpass/solicitacoes/recomendar.html'
+    context = {'form': form }
+
+    if request.POST:
+        form = RecomedacaoForm(request.POST)
+        if form.is_valid():
+            vacina = form.cleaned_data['vacina']
+            texto = form.cleaned_data['texto']
+            solicitante = Usuario.objects.get(django_user=request.user)
+            s = Solicitacao(recomendacao=vacina, texto=texto, solicitante=solicitante)
+            s.save()
+            messages.success(request, 'Sua sugestão foi recebida e será avaliada por um de nossos colaboradores. Aguarde contato por email.')
+    return render(request, template, context)
+
+
 def solicitacoes(request):
-    pendentes_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.filter(status=Solicitacao.PENDENTE), id_formulario=1)
+    pendentes_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.filter(status=Solicitacao.PENDENTE),
+                                         id_formulario=1)
     if not pendentes_filter.qs.exists():
         messages.warning(request, constants.noresult)
     pendentes_table = SolicitacaoTable(pendentes_filter.qs)
     RequestConfig(request, paginate={'per_page': 10}).configure(pendentes_table)
 
-    resolvidas_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.exclude(status=Solicitacao.PENDENTE), id_formulario=2)
+    resolvidas_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.exclude(status=Solicitacao.PENDENTE),
+                                          id_formulario=2)
     if not resolvidas_filter.qs.exists():
         messages.warning(request, constants.noresult)
     resolvidas_table = SolicitacaoTable(resolvidas_filter.qs)
     RequestConfig(request, paginate={'per_page': 10}).configure(resolvidas_table)
 
-    context = {'pendentes_filter': pendentes_filter, 'resolvidas_filter':resolvidas_filter, 'pendentes_table': pendentes_table, 'resolvidas_table': resolvidas_table}
+    context = {'pendentes_filter': pendentes_filter, 'resolvidas_filter': resolvidas_filter,
+               'pendentes_table': pendentes_table, 'resolvidas_table': resolvidas_table}
     return render(request, 'vacpass/solicitacoes/solicitacoes.html', context)
 
 
@@ -161,7 +181,7 @@ def renova_vacina(request):
             vacina = Vacina.objects.get(nome=vacina)
 
             dose = form.cleaned_data['dose']
-            dose_ant = DoseVacina.objects.get(vacina=vacina, dose=dose-1)
+            dose_ant = DoseVacina.objects.get(vacina=vacina, dose=dose - 1)
             dose = DoseVacina.objects.get(vacina=vacina, dose=dose)
             data_anterior = ControleVencimento.objects.get(cartao=cartao, dose=dose_ant).data
             if data_input > datetime.date.today():
@@ -256,8 +276,7 @@ def meu_cartao(request):
         newControle = ControleVencimento(cartao=cartao, dose=dose, data=data_input)
         newControle.save()
 
-
-# Cria os vencimento
+    # Cria os vencimento
 
     dose_dict = calcula_dict(cartao)
     vacinas = calcula_novas_vacinas(dose_dict)
@@ -431,7 +450,7 @@ def criar_conta(request):
         form = CriarContaForm(request.POST)
         if form.is_valid():
             nome = form.cleaned_data['nome']
-            cartao = Cartao(nome="cartao do "+nome)
+            cartao = Cartao(nome="cartao do " + nome)
             cpf = form.cleaned_data['cpf']
             senha = form.cleaned_data['senha']
             confirmacao = form.cleaned_data['confirmar_senha']
@@ -477,7 +496,8 @@ def recupera_senha(request):
                 form.add_error('email', 'Email nao cadastrado')
                 has_error = True
             if not has_error:
-                senha_nova = User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
+                senha_nova = User.objects.make_random_password(length=10,
+                                                               allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
                 user = User.objects.get(email=email)
                 user.set_password(senha_nova)
                 user.save()
