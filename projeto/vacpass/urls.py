@@ -24,5 +24,7 @@ urlpatterns = [
     url(r'^recuperarsenha/$', recupera_senha, name="recuperasenha"),
     url(r'^deletardose/(?P<string>.+)/(?P<ndose>[0-9])/', deletar_dose, name="deletardose"),
     url(r'^novavacina/$', nova_vacina, name="novavacina"),
-    url(r'^renovavacina/$', renova_vacina, name="renovavacina")
+    url(r'^renovavacina/$', renova_vacina, name="renovavacina"),
+    url(r'^recomendar/$', recomendacoes, name="recomendar"),
+
 ]

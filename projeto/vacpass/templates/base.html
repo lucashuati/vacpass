@@ -40,7 +40,7 @@
                 <li><a href="{% url 'buscarvacina' %}">Vacinas</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'meucartao' %}">Meu cartão</a></li>
-                    <li><a href="{% url 'solicitarvacina' %}">Solicitar vacina</a></li>
+                    <li><a href="{% url 'recomendar' %}">Solicitar vacina</a></li>
                     <li><a href="{% url 'gerenciardependente' %}">Gerenciar Dependente</a></li>
                 {% endif %}
 
