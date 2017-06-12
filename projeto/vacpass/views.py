@@ -11,7 +11,6 @@ from django.views.generic import UpdateView, DetailView
 from django.views.generic.edit import DeleteView
 from django_tables2 import RequestConfig
 
-import constants
 from vacpass.filters import *
 from vacpass.tables import *
 from .forms import *
