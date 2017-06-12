@@ -1,5 +1,8 @@
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import *
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
@@ -10,14 +13,8 @@ from django_tables2 import RequestConfig
 
 import constants
 from vacpass.filters import *
-from vacpass.tables import VacinaTable, DoseTable, SolicitacaoTable
+from vacpass.tables import *
 from .forms import *
-
-
-# !/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-#
 
 
 def calcula_dict(cartao):
@@ -39,51 +36,37 @@ def calcula_dict(cartao):
 
 # Calculo das novas vacinas de um usuario
 def calcula_novas_vacinas(dose_dict=False):
-    if not dose_dict:
-        pass
-
-    vacinas = []
-    all_vac = Vacina.objects.all()
-
-    for v in all_vac:
-        if not (v.nome in dose_dict):
-            vacinas.append(v)
-
-    return vacinas
+    return [v for v in Vacina.objects.all() if v.nome not in dose_dict]
 
 
 def index(request):
     return render(request, 'vacpass/index.html', {"basedir": settings.BASE_DIR})
 
 
-def solicitar_vacina(request):
-    pass
-
-
 def solicitar_revisao(request, vacina_pk):
     vacina = Vacina.objects.get(id=vacina_pk)
     form = SolicitacaoRevisaoForm(request.POST or None)
-    extra_script = ''
+    solicitado = False
     if request.POST:
         if form.is_valid():
             texto = form.cleaned_data['texto']
             solicitante = request.user.usuario
             revisao = Solicitacao(texto=texto, vacina=vacina, solicitante=solicitante)
             revisao.save()
-            extra_script = 'window.top.fecha_modal(); window.top.adiciona_mensagem("{}", "{}")'.format(
-                "info",
+            messages.info(
+                request,
                 "Sua sugestão foi recebida e será avaliada por um de nossos colaboradores. Aguarde contato por email."
             )
-            extra_script = mark_safe(extra_script)
+            solicitado = True
 
-    context = {'form': form, 'vacina': vacina, 'extra_script': extra_script}
-    return render(request, 'vacpass/vacina/solicitarRevisao.html', context)
+    context = {'form': form, 'vacina': vacina, 'solicitado': solicitado}
+    return render(request, 'vacpass/vacina/solicitar_revisao.html', context)
 
 
-def recomendacoes(request):
+def solicitar_vacina(request):
     form = RecomedacaoForm()
     template = 'vacpass/solicitacoes/recomendar.html'
-    context = {'form': form }
+    context = {'form': form}
 
     if request.POST:
         form = RecomedacaoForm(request.POST)
@@ -91,25 +74,32 @@ def recomendacoes(request):
             vacina = form.cleaned_data['vacina']
             texto = form.cleaned_data['texto']
             solicitante = Usuario.objects.get(django_user=request.user)
-            s = Solicitacao(recomendacao=vacina, texto=texto, solicitante=solicitante)
+            s = Solicitacao(vacina_id=vacina, texto=texto, solicitante=solicitante)
             s.save()
-            messages.success(request, 'Sua sugestão foi recebida e será avaliada por um de nossos colaboradores. Aguarde contato por email.')
+            messages.success(
+                request,
+                'Sua sugestão foi recebida e será avaliada por um de nossos colaboradores. Aguarde contato por email.'
+            )
     return render(request, template, context)
 
 
 def solicitacoes(request):
-    pendentes_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.filter(status=Solicitacao.PENDENTE),
-                                         id_formulario=1)
-    if not pendentes_filter.qs.exists():
-        messages.warning(request, constants.noresult)
-    pendentes_table = SolicitacaoTable(pendentes_filter.qs)
-    RequestConfig(request, paginate={'per_page': 10}).configure(pendentes_table)
+    solicitacoes_pendentes = Solicitacao.objects.filter(status=Solicitacao.PENDENTE)
+    solicitacoes_nao_pendentes = Solicitacao.objects.exclude(status=Solicitacao.PENDENTE)
 
-    resolvidas_filter = SolicitacaoFilter(request.GET, Solicitacao.objects.exclude(status=Solicitacao.PENDENTE),
-                                          id_formulario=2)
-    if not resolvidas_filter.qs.exists():
-        messages.warning(request, constants.noresult)
+    pendentes_filter = SolicitacaoFilter(request.GET, solicitacoes_pendentes, id_formulario=1)
+    resolvidas_filter = SolicitacaoFilter(request.GET, solicitacoes_nao_pendentes, id_formulario=2)
+
+    if not pendentes_filter.qs.exists() and not pendentes_filter.is_empty():
+        messages.warning(request, 'Nenhuma solicitação pendente para os filtros selecionados')
+
+    if not resolvidas_filter.qs.exists() and not resolvidas_filter.is_empty():
+        messages.warning(request, 'Nenhuma solicitação resolvida para os filtros selecionados')
+
+    pendentes_table = SolicitacaoTable(pendentes_filter.qs)
     resolvidas_table = SolicitacaoTable(resolvidas_filter.qs)
+
+    RequestConfig(request, paginate={'per_page': 10}).configure(pendentes_table)
     RequestConfig(request, paginate={'per_page': 10}).configure(resolvidas_table)
 
     context = {'pendentes_filter': pendentes_filter, 'resolvidas_filter': resolvidas_filter,
@@ -198,7 +188,7 @@ def renova_vacina(request):
     dose_dict = calcula_dict(cartao)
     vacinas = calcula_novas_vacinas(dose_dict)
 
-    return render(request, 'vacpass/cartaoVacina.html',
+    return render(request, 'vacpass/cartao/cartao_vacina.html',
                   {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': NovaVacinaCartaoForm(),
                    'formRenova': RenovaVacinaForm(),
                    'errorRenova': error})
@@ -230,7 +220,7 @@ def nova_vacina(request):
     dose_dict = calcula_dict(cartao)
     vacinas = calcula_novas_vacinas(dose_dict)
 
-    return render(request, 'vacpass/cartaoVacina.html',
+    return render(request, 'vacpass/cartao/cartao_vacina.html',
                   {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': NovaVacinaCartaoForm(),
                    'formRenova': RenovaVacinaForm(), 'horaAtual': datetime.date.today().strftime("%d/%m/%y"),
                    'errorAdd': error})
@@ -250,18 +240,14 @@ def deletar_dose(request, string="empty", ndose=0):
             ControleVencimento.objects.get(dose=d, cartao=c).delete()
             sucess = True
 
-    return render(request, 'vacpass/deletarDose.html',
-                  {'form': form, 'vacina': string, 'dose': ndose, 'removida': sucess})
+    context = {'form': form, 'vacina': string, 'dose': ndose, 'removida': sucess}
+    return render(request, 'vacpass/cartao/deletar_dose.html', context)
 
 
 def meu_cartao(request):
     usuario = Usuario.objects.get(django_user=request.user)
     cartao = usuario.cartao
     dependentes = Dependente.objects.filter(usuario=request.user.usuario)
-    all_vac = Vacina.objects.all()
-    vacinas = []
-
-    dose_dict = {}
 
     formNew = NovaVacinaCartaoForm()
     formRenova = RenovaVacinaForm()
@@ -277,11 +263,10 @@ def meu_cartao(request):
         newControle.save()
 
     # Cria os vencimento
-
     dose_dict = calcula_dict(cartao)
     vacinas = calcula_novas_vacinas(dose_dict)
 
-    return render(request, 'vacpass/cartaoVacina.html',
+    return render(request, 'vacpass/cartao/cartao_vacina.html',
                   {'dependetes': dependentes, 'vacinas': vacinas, 'doses': dose_dict, 'formNew': formNew,
                    'formRenova': formRenova, 'horaAtual': datetime.date.today().strftime("%d/%m/%y")})
 
@@ -291,7 +276,7 @@ def buscar_vacina(request):
     table = VacinaTable(filter.qs)
     RequestConfig(request).configure(table)
     if not filter.qs.exists():
-        messages.warning(request, constants.noresult)
+        messages.warning(request, 'Nenhum resultado encontrado')
     context = {'table': table, 'filter': filter}
 
     return render(request, 'vacpass/vacina/buscar.html', context)
@@ -309,7 +294,7 @@ class ConsultarVacina(DetailView):
         return context
 
 
-def gerenciar_dep(request):
+def gerenciar_conta(request):
     form = DependenteForm()
     if request.POST:
         form = DependenteForm(request.POST)
@@ -321,35 +306,30 @@ def gerenciar_dep(request):
             dependente.usuario = request.user.usuario
             dependente.save()
 
-    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
-    return render(request, 'vacpass/gerenciarDep.html', {'form': form, 'dependentes': dependentes})
+    dependentes_table = DependenteTable(Dependente.objects.filter(usuario=request.user.usuario))
+    RequestConfig(request, paginate={'per_page': 10}).configure(dependentes_table)
+    return render(request, 'vacpass/conta/gerenciar_conta.html', {'form': form, 'dependentes_table': dependentes_table})
 
 
-def edit_dep(request):
-    form = DependenteForm()
-    dependentes = Dependente.objects.filter(usuario=request.user.usuario)
-    return render(request, 'vacpass/editDep.html', {'form': form, 'dependentes': dependentes})
-
-
-class DepUpdate(UpdateView):
+class DependenteUpdate(UpdateView):
     model = Dependente
     form_class = DependenteForm
-    template_name = 'vacpass/editDep.html'
+    template_name = 'vacpass/conta/editar_dependente.html'
     template_name_suffix = '_update_form'
 
     def get_success_url(self):
         messages.success(self.request, "O dependente foi editado")
-        return reverse(gerenciar_dep)
+        return reverse(gerenciar_conta)
 
 
-class DepExclude(DeleteView):
+class DependenteExclude(DeleteView):
     model = Dependente
-    template_name = 'vacpass/excluiDep.html'
+    template_name = 'vacpass/conta/excluir_dependente.html'
     fields = ['nome']
 
     def get_success_url(self):
         messages.success(self.request, "O dependente foi excluido")
-        return reverse(gerenciar_dep)
+        return reverse(gerenciar_conta)
 
 
 class ContaUpdate(UpdateView):
@@ -358,7 +338,7 @@ class ContaUpdate(UpdateView):
     template_name_suffix = '_update_form'
 
     def get_success_url(self):
-        return '../gerenciardependente/'
+        return reverse(gerenciar_conta)
 
 
 def excluir_conta(request):
@@ -376,7 +356,7 @@ def excluir_conta(request):
             else:
                 form.add_error('senha', 'Senha Incorreta')
 
-    return render(request, 'vacpass/deletarConta.html', {'form': form})
+    return render(request, 'vacpass/conta/deletar_conta.html', {'form': form})
 
 
 def editar_senha(request):
@@ -401,12 +381,11 @@ def editar_senha(request):
             if not has_error:
                 request.user.set_password(senha_nova)
                 request.user.save()
-                dependentes = Dependente.objects.filter(usuario=request.user.usuario)
+                update_session_auth_hash(request, request.user)
                 messages.info(request, 'Sua senha foi atualizada')
-                return render(request, 'vacpass/gerenciarDep.html',
-                              {'form': DependenteForm(), 'dependentes': dependentes})
+                return redirect(reverse(gerenciar_conta))
 
-    return render(request, 'vacpass/editPass.html', {'form': form})
+    return render(request, 'vacpass/conta/editar_senha.html', {'form': form})
 
 
 def editar_conta(request):
@@ -432,16 +411,16 @@ def editar_conta(request):
                     form.add_error('password', 'Senha Incorreta')
                     has_error = True
                 if has_error:
-                    return render(request, 'vacpass/editarConta.html', {'form': form})
+                    return render(request, 'vacpass/conta/editar_conta.html', {'form': form})
                 else:
                     user.email = email_new
             user.first_name = name_new
             user.save()
             dependentes = Dependente.objects.filter(usuario=request.user.usuario)
             messages.info(request, 'Usuario editado com sucesso')
-            return render(request, 'vacpass/gerenciarDep.html', {'form': DependenteForm(), 'dependentes': dependentes})
+            return render(request, 'vacpass/conta/gerenciar_conta.html', {'form': DependenteForm(), 'dependentes': dependentes})
 
-    return render(request, 'vacpass/editarConta.html', {'form': form})
+    return render(request, 'vacpass/conta/editar_conta.html', {'form': form})
 
 
 def criar_conta(request):
@@ -485,27 +464,24 @@ def criar_conta(request):
 
 
 def recupera_senha(request):
-    form = RecuperaSenhaForm()
+    form = RecuperaSenhaForm(request.POST or None)
     if request.POST:
-        form = RecuperaSenhaForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            valid_email = User.objects.filter(email=email)
-            has_error = False
-            if not valid_email.exists():
+            if not User.objects.filter(email=email).exists():
                 form.add_error('email', 'Email nao cadastrado')
-                has_error = True
-            if not has_error:
-                senha_nova = User.objects.make_random_password(length=10,
-                                                               allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789')
+            else:
+                senha_nova = User.objects.make_random_password(length=10)
                 user = User.objects.get(email=email)
                 user.set_password(senha_nova)
                 user.save()
-                texto = 'Geramos sua nova senha: ' + senha_nova + ' \n\nCaso deseje alterar para uma de sua preferencia, entre no seu perfil e clique na aba alterar senha seguindo os passos descritos.\n\n Vacpass Company 2017.'
+                texto = 'Geramos sua nova senha: {}' \
+                        '\n\nCaso deseje alterar para uma de sua preferencia,"' \
+                        ' entre no seu perfil e clique na aba alterar senha seguindo os passos descritos."' \
+                        '\n\n Vacpass Company 2017.'.format(senha_nova)
                 send_mail('Recuperacao de Senha', texto, settings.EMAIL_HOST_USER, [email])
                 messages.info(request, 'Nova senha enviada para seu e-mail')
                 return render(request, 'registration/login.html', {'form': AuthenticationForm()})
 
-        return render(request, 'vacpass/recuperaSenha.html', {'form': form})
-    else:
-        return render(request, 'vacpass/recuperaSenha.html', {'form': form})
+    return render(request, 'vacpass/recuperar_senha.html', {'form': form})
+

@@ -1,1 +1,0 @@
-noresult = 'Nenhum resultado encontrado'

@@ -14,3 +14,10 @@ class SolicitacaoFilter(django_filters.FilterSet):
         for x in self.base_filters:
             self.filters[x + str(id_formulario)] = self.filters.pop(x)
 
+    def is_empty(self):
+        for _, v in self.form.cleaned_data.items():
+            if v:
+                return False
+        return True
+
+

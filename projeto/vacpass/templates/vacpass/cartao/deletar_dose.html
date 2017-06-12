@@ -8,7 +8,7 @@
 <body>
 {% if removida %}
     Dose Removida
-    <a id="removido" onclick="window.top.location.reload();" href="#">Voltar</a>
+    <script>window.top.fecha_modal();window.top.location=window.top.location;</script>
 
 {% else %}
     <form action="{% url 'deletardose' vacina dose %}" method="post">

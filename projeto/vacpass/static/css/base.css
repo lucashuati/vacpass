@@ -11,12 +11,12 @@ body {
 
 /* LINKS */
 
-a:link, a:visited {
+a:link, a:visited, .link {
     color: #447e9b;
     text-decoration: none;
 }
 
-a:focus, a:hover {
+a:focus, a:hover, .link:hover{
     color: #036;
 }
 

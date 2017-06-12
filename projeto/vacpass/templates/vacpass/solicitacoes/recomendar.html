@@ -3,7 +3,7 @@
     <div style="margin-bottom:50px">
         <h1>Solicitar Vacina</h1>
         <hr/>
-        <form action="{% url 'recomendar' %}" method="post">
+        <form action="{% url 'solicitarvacina' %}" method="post">
             {% csrf_token %}
             <table>
                 {{ form.as_table }}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+</head>
+<body>
+{% if solicitado %}
+    Dose Removida
+    <script>window.top.fecha_modal();window.top.location=window.top.location;</script>
+{% else %}
+    <form action="{% url 'solicitarrevisao' vacina.id %}" method="post">
+        {% csrf_token %}
+        <div>
+        {% for field in form %}
+           {{ field }}
+           {{ field.errors }}
+        {% endfor %}
+        </div>
+        <input type="submit" value="Enviar">
+    </form>
+{% endif %}
+</body>
+</html>

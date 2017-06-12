@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from django import forms
@@ -131,7 +130,7 @@ class RecomedacaoForm(forms.Form):
         'cols': '80',
         'rows': '10',
         'style': "resize:none",
-        'placeholder': 'Descreva brevemente sua o porque da sua solicitaçao de nova vacina'
+        'placeholder': 'Descreva brevemente o motivo da sua solicitaçao de nova vacina'
     }))
 
 

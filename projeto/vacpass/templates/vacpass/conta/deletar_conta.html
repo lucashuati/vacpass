@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Tem certeza que deseja excluir esta conta ? </h2>
     <p>Nao sera possivel refazer essa açao, para confirmar digite sua senha</p>
-    <form method="post" action={% url "deleteconta" %}>
+    <form method="post" action={% url 'deletarconta' %}>
             {% csrf_token %}
             <table>
                <tbody>

@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django_tables2 import tables
 from django_tables2.utils import Accessor
 
-from vacpass.models import Vacina, DoseVacina, Solicitacao
+from vacpass.models import Vacina, DoseVacina, Solicitacao, Dependente
 
 
 def truncar(long_str):
@@ -62,3 +62,12 @@ class SolicitacaoTable(tables.Table):
             return mark_safe('<a href={}>{}</a>'.format(reverse('consultarvacina', args=[record.vacina.id]), nome))
         else:
             return nome
+
+
+class DependenteTable(tables.Table):
+    class Meta:
+        model = Dependente
+        exclude = ['id', 'tipo', 'ndocumento', 'cartao']
+    documento = tables.columns.Column(accessor='documento')
+    editar = tables.columns.LinkColumn(text='editar', viewname='editardependente', args=[Accessor('id')])
+    excluir = tables.columns.LinkColumn(text='excluir', viewname='excluirdependente', args=[Accessor('id')])

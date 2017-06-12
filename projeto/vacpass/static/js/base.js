@@ -32,9 +32,5 @@ $(document).ready(function () {
 
 //Estas funções estão a ser usadas em views.py. Não deixe o pycharm lhe enganar
 function fecha_modal(){
-    $(".close").trigger("click")
-}
-
-function adiciona_mensagem(classe, mensagem){
-    $(".messagelist").append($("<li>").attr('class', classe).text(mensagem));
+    $(".close").trigger("click");
 }

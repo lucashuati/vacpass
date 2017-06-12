@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
@@ -27,19 +26,22 @@ class Usuario(models.Model):
 
 
 class Dependente(models.Model):
-    CHOICES = [('CPF', 'CPF'), ('RG', 'RG'), ('certidao', 'certidao')]
+    TIPOS_DOCUMENTO = ((1, 'CPF'), (2, 'RG'), (3, 'certidao'))
 
-    tipo = models.CharField(max_length=10, choices=CHOICES)
+    tipo = models.IntegerField(choices=TIPOS_DOCUMENTO)
     nome = models.CharField(max_length=50)
     ndocumento = models.CharField(max_length=50)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     cartao = models.ForeignKey(Cartao)
 
     def get_absolute_url(self):
-        return reverse('editdep', args=[str(self.id)])
+        return reverse('editardependente', args=[str(self.id)])
 
-    def get_url(self):
-        return reverse('excluidep', args=[str(self.id)])
+    def get_excluir_url(self):
+        return reverse('excluirdependente', args=[str(self.id)])
+
+    def documento(self):
+        return "{}: {}".format(self.get_tipo_display(), self.ndocumento)
 
     def __str__(self):
         return self.nome
@@ -110,7 +112,6 @@ class Solicitacao(models.Model):
         (RESOLVIDO, "Resolvido"),
         (NEGADA, "Negada")
     )
-    recomendacao = models.CharField(max_length=25, null=True)
     texto = models.TextField()
     datahora = models.DateTimeField(auto_now_add=True)
     vacina = models.ForeignKey(Vacina, on_delete=models.CASCADE, null=True, to_field='nome')

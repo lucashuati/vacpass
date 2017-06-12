@@ -27,7 +27,7 @@
                 <div id="user-tools">
                     Bem vindo, <strong>{{ user.first_name }}</strong>.
                     <a href="/">Home</a>
-                    <a href="{% url 'gerenciardependente' %}">Gerenciar conta</a>
+                    <a href="{% url 'gerenciarconta' %}">Gerenciar conta</a>
 
                     <a href="{% url 'logout' %}?next={% url 'index' %}">Sair</a>
                 </div>
@@ -40,8 +40,8 @@
                 <li><a href="{% url 'buscarvacina' %}">Vacinas</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'meucartao' %}">Meu cartão</a></li>
-                    <li><a href="{% url 'recomendar' %}">Solicitar vacina</a></li>
-                    <li><a href="{% url 'gerenciardependente' %}">Gerenciar Dependente</a></li>
+                    <li><a href="{% url 'solicitarvacina' %}">Solicitar vacina</a></li>
+                    <li><a href="{% url 'gerenciarconta' %}">Gerenciar Dependentes</a></li>
                 {% endif %}
 
                 {% if user.is_staff %}
@@ -55,7 +55,7 @@
                 <p><b>Conta</b></p>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'logout' %}?next={% url 'index' %}">Logout</a></li>
-                    <li><a href="{% url 'editpass' %}">Alterar Senha</a></li>
+                    <li><a href="{% url 'editarsenha' %}">Alterar Senha</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
                 {% endif %}
