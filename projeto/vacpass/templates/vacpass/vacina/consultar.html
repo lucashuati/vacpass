@@ -19,9 +19,17 @@
     {% load render_table from django_tables2 %}
     {% render_table dosetable %}
 
+    <h2>Preço</h2>
+    {% if user.is_staff %}
+    <p>R$ <a href = "{% url 'admin:vacpass_vacina_change' object.pk %}">{{ object.preco }} </a></p>
+    {% else %}
+    <p>R$ {{ object.preco }}</p>
+    {% endif %}
     <h2>Revisão</h2>
     {% if user.is_authenticated %}
     Acredita que há algum dado incoerente ou desatualizado nesta página? <span class="abremodal link" style="cursor:pointer" >Solicite uma revisão</span>.
+
+
 
     <div class="modal">
         <div class="modal-content">

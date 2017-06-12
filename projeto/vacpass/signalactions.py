@@ -1,3 +1,7 @@
+
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from django.contrib import messages
 from django.contrib.auth import user_logged_in
 from django.db.models.signals import pre_save
