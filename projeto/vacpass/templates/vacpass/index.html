@@ -1,34 +1,402 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>VacPass - O seu cartão de vacinas online</h1>
-
-    <p>Bem vindo ao <em>VacPass</em>, um carão de vacinas online que serve para ganhar pontos e passar na matéria.
-        Seguimos o tutorial da
-        <a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Tutorial_local_library_website">mozilla</a>,
-            porque ele tem uma pá de coisa pronta e um monte de exemplo bacana
-    <p>O que está pronto: nada.
-    <p>O que falta fazer: {tudo} - {o que está pronto} <\p>
-    <p> gastei tempo escrevendo esse monte de merda, são 22:39 da noite e ainda não fui dormir. Amanhã tem aula as 7.
-        Adoro trabalhos escolares opressores. Amo muito o cefet e seus professores, cada um crendo na importancia
-        suprema de sua própria disciplina. Amo especialmente a situação em que os professores da mesma disciplina, um da
-        teórica e um da prática aplicam o mesmo trabalho (um exemplo hipotético, os professores de engenharia de
-        software e laboratório de engenharia de software aplicam o mesmo trabalho, e os alunos se divertem fazendo o
-        mesmo trabalho várias vezes. Isso deveria ser feito no primeiro período, para ensinar o reuso de código para os
-        calouros burros, já que copiamos todas as telas de um trabalho para outro).
-    <p> 22:43:14, vou olhar o keep para verificar qual é o próximo trabalho opressor que comecarei a fazer.
-        Provavelmente será o de engenharia de software teórico, que é igual a esse. Bora clonar tela.
+    <div id="mw-head-base" class="noprint"></div>
+    <div id="content" class="mw-body" role="main">
 
 
-    <p>BASEDIR: {{ basedir }}</p>
+        <div id="siteNotice" class="mw-body-content"><!-- CentralNotice --></div>
+        <div class="mw-indicators mw-body-content"></div>
+        <h1 id="firstHeading" class="firstHeading" lang="pt">Vacina</h1>
+        <div id="bodyContent" class="mw-body-content">
+            <div id="siteSub">Origem: Wikipédia, a enciclopédia livre.</div>
+            <div id="contentSub"></div>
+            <div id="jump-to-nav" class="mw-jump"> Ir para: a</div>
+            <div id="mw-content-text" lang="pt" dir="ltr" class="mw-content-ltr">
+                <div class="mw-parser-output"><p>Uma <b>vacina</b> é uma preparação biológica que fornece ativa para uma
+                    a particular. Uma vacina tipicamente contém um agente que se assemelha a um causador de doenças e é
+                    muitas vezes feito de formas enfraquecidas ou mortas do , das suas s ou de uma das suas de
+                    superfície. O agente estimula o do corpo para reconhecê-lo como uma ameaça, destruí-lo e a manter um
+                    registro dele para que o sistema imunológico possa mais facilmente reconhecer e destruir qualquer um
+                    desses microrganismos que mais tarde encontre. As vacinas podem ser s (exemplo: para prevenir ou
+                    melhorar os efeitos de uma futura por qualquer o natural ou "selvagem"), ou s (por exemplo, vacinas
+                    contra o r estão a ser pesquisadas).</p>
+                    <p>A administração de vacinas é chamada o e sua eficácia tem sido amplamente estudada e verificada;
+                        por exemplo, a ,' a V' e a a.' A vacinação é o método mais eficaz de prevenção de doenças
+                        infecciosas,' a imunidade generalizada devido à vacinação é amplamente responsável pela
+                        erradicação mundial da a e pela restrição de doenças como e, e de grande parte do mundo. A (OMS)
+                        relata que as vacinas licenciadas estão atualmente disponíveis para prevenir ou contribuir para
+                        a prevenção e controle de 25 infecções.'</p>
+                    <p>Os termos "vacina" e "vacinação" são derivados de <i>Variolae vacinae</i> (varíola da vaca), o
+                        termo inventado por r para denotar a a.' Em 1881, para homenagear Jenner, r propôs que os termos
+                        fossem estendidos para cobrir as novas inoculações protetoras então em desenvolvimento.'</p>
+                    <p></p>
+                    <div id="toc" class="toc">
+                        <div id="toctitle" class="toctitle"><h2>Índice</h2></div>
+                        <ul>
+                            <li class="toclevel-1 tocsection-1"><a href="#Hist.C3.B3ria"><span
+                                    class="tocnumber">1</span> <span class="toctext">História</span></a></li>
+                            <li class="toclevel-1 tocsection-2"><a href="#Efic.C3.A1cia"><span
+                                    class="tocnumber">2</span> <span class="toctext">Eficácia</span></a></li>
+                            <li class="toclevel-1 tocsection-3"><a href="#Tipos"><span class="tocnumber">3</span> <span
+                                    class="toctext">Tipos</span></a></li>
+                        </ul>
+                        <ul>
+                            <li class="toclevel-2 tocsection-4"><a href="#Inativada"><span class="tocnumber">3.1</span>
+                                <span class="toctext">Inativada</span></a></li>
+                            <li class="toclevel-2 tocsection-5"><a href="#Atenuada"><span class="tocnumber">3.2</span>
+                                <span class="toctext">Atenuada</span></a></li>
+                            <li class="toclevel-2 tocsection-6"><a href="#Toxoide"><span class="tocnumber">3.3</span>
+                                <span class="toctext">Toxoide</span></a></li>
+                            <li class="toclevel-2 tocsection-7"><a href="#Subunidade"><span class="tocnumber">3.4</span>
+                                <span class="toctext">Subunidade</span></a></li>
+                            <li class="toclevel-2 tocsection-8"><a href="#Conjugada"><span class="tocnumber">3.5</span>
+                                <span class="toctext">Conjugada</span></a></li>
+                            <li class="toclevel-2 tocsection-9"><a href="#Experimental"><span
+                                    class="tocnumber">3.6</span> <span class="toctext">Experimental</span></a></li>
+                            <li class="toclevel-2 tocsection-10"><a href="#Val.C3.AAncia"><span
+                                    class="tocnumber">3.7</span> <span class="toctext">Valência</span></a></li>
+                            <li class="toclevel-2 tocsection-11"><a href="#Heterot.C3.ADpica"><span class="tocnumber">3.8</span>
+                                <span class="toctext">Heterotípica</span></a></li>
+                        </ul>
+                        </li>
+                        <li class="toclevel-1 tocsection-12"><a href="#Produ.C3.A7.C3.A3o"><span
+                                class="tocnumber">4</span> <span class="toctext">Produção</span></a></li>
+                        <li class="toclevel-1 tocsection-13"><a href="#Sociedade_e_cultura"><span
+                                class="tocnumber">5</span> <span class="toctext">Sociedade e cultura</span></a></li>
+                        <ul>
+                            <li class="toclevel-2 tocsection-14"><a href="#Oposi.C3.A7.C3.A3o"><span class="tocnumber">5.1</span>
+                                <span class="toctext">Oposição</span></a></li>
+                        </ul>
+                        <p></p>
+                        <h2><span class="mw-headline" id="Hist.C3.B3ria">História</span></h2>
+                        <div class="thumb tleft">
+                            <div class="thumbinner" style="width:222px;"><a href="#"
+                                                                            class="image"><img alt=""
+                                                                                               src="//upload.wikimedia.org/wikipedia/commons/thumb/3/32/Eduard_Jenner.jpg/220px-Eduard_Jenner.jpg"
+                                                                                               width="220" height="249"
+                                                                                               class="thumbimage"
+                                                                                               srcset="//upload.wikimedia.org/wikipedia/commons/thumb/3/32/Eduard_Jenner.jpg/330px-Eduard_Jenner.jpg 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/3/32/Eduard_Jenner.jpg/440px-Eduard_Jenner.jpg 2x"
+                                                                                               data-file-width="500"
+                                                                                               data-file-height="566"/></a>
+                                <div class="thumbcaption">
+                                    <div class="magnify"></div>
+                                    r, cerca de 1824, em arte de
+                                </div>
+                            </div>
+                        </div>
+                        <p>Antes da introdução da vacinação com material de casos de (vacinação heterotípica), a poderia
+                            ser prevenida pela o deliberada do vírus da varíola, processo posteriormente referido como
+                            "variolação" para distingui-lo da vacinação contra a varíola. As primeiras sugestões da
+                            prática de inoculação para a varíola vêm da a durante o século X.' Os também praticaram o
+                            mais antigo uso documentado da variolação, que remonta ao século XV. Eles implementaram um
+                            método de " nasal" administrado por sopro de material de varíola em pó até as narinas.
+                            Várias técnicas de insuflação foram registradas ao longo dos séculos XVI e XVII na China.'
+                            Dois relatórios sobre a prática chinesa de inoculação foram recebidos pela em s em 1700; um
+                            pelo Dr. r, que recebeu um relatório de um empregado da estacionada na China e outro pelo
+                            Dr. .'</p>
+                        <p>Em algum momento durante o final da década de 1760, enquanto servia era aprendiz de / , soube
+                            da história, comum nas áreas rurais, de que os trabalhadores de nunca teriam a doença,
+                            muitas vezes fatal ou desfigurante, porque já haviam tido varíola bovina, que tem um efeito
+                            muito suave em . Em 1796, Jenner coletou s da mão de uma vaca leiteira com varíola bovina,
+                            raspou-a no braço de um menino de 8 anos e, seis semanas mais tarde, inoculou o menino com
+                            varíola, observando depois que ele não pegava a doença.'' Jenner estendeu seus estudos e em
+                            1798 relatou que sua vacina era segura em crianças e adultos e poderia ser transferida de
+                            braço a braço, reduzindo a dependência de suprimentos incertos de vacas infectadas. Uma vez
+                            que a vacinação com a vaca foi muito mais segura do que a inoculação da varíola,' esta
+                            última, embora ainda amplamente praticada na , foi proibida em 1840.' A segunda geração de
+                            vacinas foi introduzida na década de 1880 por , que desenvolveu vacinas contra o a e o .' As
+                            vacinas do final do século XIX eram consideradas uma questão de prestígio nacional, com leis
+                            de vacinação obrigatória.'</p>
+                        <p>O século XX viu a introdução de várias vacinas bem sucedidas, incluindo as contra a , , e .
+                            As principais realizações incluíram o desenvolvimento da vacina contra a na década de 1950 e
+                            a erradicação da a durante os anos 1960 e 1970. n foi o mais prolífico dos desenvolvedores
+                            das vacinas no século XX. À medida que as vacinas se tornaram mais comuns, muitas pessoas
+                            começaram a tomá-las como garantias. No entanto, as vacinas permanecem indescritíveis para
+                            muitas doenças importantes, como , , e / .''</p>
+                        <h2><span class="mw-headline" id="Efic.C3.A1cia">Eficácia</span>'</h2>
+                        <p>Vacinas são, historicamente, o meio mais efetivo e seguro para se combater e erradicar
+                            doenças infecciosas'. Limitações para sua eficácia, porém, existem'. Algumas vezes, a
+                            proteção oferecida pela vacina falha porque o sistema imune humano não consegue responder
+                            adequadamente ou não responde. A falta de resposta imune envolve muitos fatores, como , uso
+                            de esteroides sintéticos ou V'. Pode também haver um fator genético para a falha da vacina,
+                            se o sistema imune não possuir linhas de células B capazes de gerar anticorpos específicos
+                            para se ligar a um determinado patógeno. Mesmo que o organismo desenvolva os anticorpos, a
+                            proteção ainda pode não ser adequada, pois a imunidade pode se desenvolver muito devagar
+                            para ser efetiva a tempo, os anticorpos podem não destruir o patógeno completamente ou pode
+                            haver muitas cepas diferentes de patógenos, nem todos suscetíveis a uma resposta imune.
+                            Porém, até mesmo a imunidade parcial, tardia ou fraca pode mitigar a infecção, resultando em
+                            uma baixa taxa de mortalidade, baixa morbidade e total recuperação.'</p>
+                        <p>s são normalmente usados para aumentar a resposta imune, particularmente para pessoas mais
+                            velhas, na faixa de 50 a 75 anos em diante, cuja resposta imune a vacinas possa ter
+                            enfraquecido devido à idade'.</p>
+                        <div class="thumb tright">
+                            <div class="thumbinner" style="width:202px;"><a
+                                    href="#" class="image"><img alt=""
+                                                                                                       src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Hilleman-Walter-Reed.jpeg/200px-Hilleman-Walter-Reed.jpeg"
+                                                                                                       width="200"
+                                                                                                       height="306"
+                                                                                                       class="thumbimage"
+                                                                                                       srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Hilleman-Walter-Reed.jpeg/300px-Hilleman-Walter-Reed.jpeg 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Hilleman-Walter-Reed.jpeg/400px-Hilleman-Walter-Reed.jpeg 2x"
+                                                                                                       data-file-width="670"
+                                                                                                       data-file-height="1024"/></a>
+                                <div class="thumbcaption">
+                                    <div class="magnify"></div>
+                                    Vacina de sarampo, criada por , salva cerca de 1 milhão de vidas ao ano .'
+                                </div>
+                            </div>
+                        </div>
+                        <p>Sua eficiência ou performance depende de vários fatores:</p>
+                        <ul>
+                            <li>a doença em si (algumas vacinas se apresentam de melhor maneira que outras dependendo da
+                                enfermidade);
+                            </li>
+                            <li>a cepa da vacina (algumas vacinas são específicas ou mais eficazes contra determinadas
+                                cepas de doenças, como no caso da gripe');
+                            </li>
+                            <li>se o calendário de vacinação foi seguido e aplicado corretamente;</li>
+                            <li>resposta idiossincrática da vacina; alguns indivíduos não respondem a certas vacinas, o
+                                que significa que eles não geraram anticorpos mesmo depois de vacinados;
+                            </li>
+                            <li>fatores externos como etnia, predisposição genética e idade.</li>
+                        </ul>
+                        <p>Se o indivíduo vacinado ainda assim desenvolver a doença contra a qual foi vacinado em uma
+                            epidemia, a doença será menos virulenta para ele do que para uma vítima não vacinada'.
+                            Existem importantes considerações a respeito da eficiência dos programas de vacinação:</p>
+                        <ol>
+                            <li>cuidadoso mapeamento para antecipar o impacto que a campanha de imunização terá na
+                                epidemiologia de uma doença a médio e longo prazo;
+                            </li>
+                            <li>supervisão prolongada para doenças relevantes seguindo a introdução da nova vacina na
+                                população;
+                            </li>
+                            <li>manutenção de altos índices de imunização, mesmo que a doença esteja virtualmente
+                                erradicada.
+                            </li>
+                        </ol>
+                        <p>Em 8, existiam cerca de 763.094 casos de nos , resultando em 552 mortes''. Após a introdução
+                            de novas vacinas, os casos caíram para pouco mais de 150 ao ano, com média de 56 casos de
+                            sarampo anuais. No começo de 2008, havia 64 casos suspeitos de sarampo, sendo que 54 deles
+                            estavam associados com viagens ao exterior. Sessenta e três dos sessenta e quatro infectados
+                            nunca tinham sido vacinados contra o sarampo ou não tinham certeza se tinham sido
+                            vacinados'.</p>
+                        <p>No l, o último diagnóstico de foi em . O último caso endêmico aconteceu no , em 1. A declarou
+                            a pólio erradicada das Américas em 1994 e da Europa em 1999, depois de um programa regional
+                            ter sido inciado em 1985, com a criação dos dias nacionais de vacinação de crianças com
+                            menos de 5 anos de idade e supervisão médica de todos os caros de paralisia em menores de 15
+                            anos de idade, para poder identificar novos surtos. Em 1988, a OMS lançou um programa global
+                            de erradicação da pólio, cujo objetivo era a total erradicação até o ano 2000'.</p>
+                        <p>Vacinas têm contribuído para a erradicação não apenas da varíola e da pólio, como também da
+                            caxumba, febre tifoide, sarampo e catapora, que era estão hoje muito menos comuns do que
+                            eram 100 anos atrás. Contanto que a população se vacine, é pouco provável que uma epidemia
+                            ocorra, muito menos que se espalhe. Este é o efeito da imunidade herdada. A pólio,
+                            transmitida apenas entre humanos, está restrita a algumas partes no interior da , e '.
+                            Infelizmente, barreiras culturais e a dificuldade de alcançar todas as crianças nesses
+                            locais estão impedindo a completa erradicação das doenaçs.</p>
+                        <h2><span class="mw-headline" id="Tipos">Tipos</span>'</h2>
+                        <p>Vacinas são feitas com microorganismos mortos ou inativos, ou substâncias purificadas
+                            derivadas dos mesmos. Existem vários tipos de vacinas em uso atualmente. Cada uma representa
+                            uma estratégia diferente para reduzir o risco de doenças enquanto induz uma resposta imune
+                            benéfica para o organismo vacinado''.</p>
+                        <div class="thumb tright">
+                            <div class="thumbinner" style="width:222px;"><a href="#"
+                                                                            class="image"><img alt=""
+                                                                                               src="//upload.wikimedia.org/wikipedia/commons/thumb/8/81/Vaccine.png/220px-Vaccine.png"
+                                                                                               width="220" height="264"
+                                                                                               class="thumbimage"
+                                                                                               srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/81/Vaccine.png/330px-Vaccine.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/8/81/Vaccine.png/440px-Vaccine.png 2x"
+                                                                                               data-file-width="1000"
+                                                                                               data-file-height="1200"/></a>
+                                <div class="thumbcaption">
+                                    <div class="magnify"></div>
+                                    Vacina
+                                </div>
+                            </div>
+                        </div>
+                        <p>Enquanto a maioria das vacinas é produzida através de compostos atenuados ou inativados, as
+                            vacinas sintéticas são compostas principalmente ou quase que totalmente por peptídeos
+                            sintéticos, s ou antígenos. </p>
+                        <h3><span class="mw-headline" id="Inativada">Inativada</span>'</h3>
+                        <p>Algumas vacinas contém micro-organismos inativos, porém anteriormente virulentos, que foram
+                            destruídos por agentes químicos, calor, radiação ou antibióticos. Exemplos de vacinas
+                            inativadas são a de e, cólera, , pólio, A e .</p>
+                        <h3><span class="mw-headline" id="Atenuada">Atenuada</span>'</h3>
+                        <p>Algumas vacinas contêm micro-organismos vivos e atenuados. Muitos destes são vírus ativos que
+                            foram cultivados sob condições que desativam suas propriedades virulentas, ou que usam
+                            organismos estreitamente relacionados, mas menos perigosos, para produzir uma ampla resposta
+                            imune. Embora a maioria das vacinas atenuadas sejam virais, algumas são de natureza
+                            bacteriana, como as de febre amarela, sarampo, , caxumba e rubéola e a doença bacteriana, o
+                            '.</p>
+                        <p>Vacinas atenuadas têm vantagens e desvantagens. Elas normalmente provocam uma resposta
+                            imunológica duradoura e são as preferíveis para vacinar adultos. Mas podem não ser seguras
+                            para indivíduos com imunidade comprometida e raramente podem sofrer mutação para a forma
+                            virulenta e causar a doença'.</p>
+                        <h3><span class="mw-headline" id="Toxoide">Toxoide</span>'</h3>
+                        <p>São vacinas feitas de compostos tóxicos inativos que causam doenças e não o micro-organismo.
+                            Vacinas desse tipos incluem a de tétano e . Conhecidas por sua eficácia, nem todos os
+                            toxoides são de micro-organismos. O veneno da , por exemplo, é utilizado em vacinas para
+                            cães contra picadas de cobras'.</p>
+                        <h3><span class="mw-headline" id="Subunidade">Subunidade</span>'</h3>
+                        <p>Diferente da introdução de micro-organismos atenuados ou inativos para gerar uma resposta do
+                            sistema imune, um fragmento dele, como uma subunidade proteica, pode gerar uma resposta do
+                            sistema imunológico. Exemplos incluem a vacina contra hepatite B, composta de da superfície
+                            do vírus previamente extraídas do o de pacientes cronicamente infectados. Hoje produz-se
+                            através de recombinação de DNA de agentes virais através de levedura, que é então
+                            purificada. Vacinas como do HPV é composta basicamente por capsídeos de proteínas do vírus e
+                            subunidades de e de vírus da gripe.</p>
+                        <h3><span class="mw-headline" id="Conjugada">Conjugada</span>'</h3>
+                        <p>Algumas bactérias têm revestimentos externos de polissacarídeos que são pouco imunogênicos.
+                            Ligando estes revestimentos exteriores a proteínas (por exemplo, toxinas), o sistema imune
+                            pode ser levado a reconhecer o polissacárido como se fosse um antígeno de proteína. Esta
+                            abordagem é utilizada na vacina "<i> </i>" tipo B. São vacinas seguras, porém possuem baixa
+                            imunogenicidade natural, para o qual é necessária a adição de adjuvantes'.</p>
+                        <h3><span class="mw-headline" id="Experimental">Experimental</span>'</h3>
+                        <div class="thumb tright">
+                            <div class="thumbinner" style="width:302px;"><a href="#"
+                                                                            class="image"><img alt=""
+                                                                                               src="//upload.wikimedia.org/wikipedia/commons/thumb/0/05/ReverseGeneticsFlu.svg/300px-ReverseGeneticsFlu.svg.png"
+                                                                                               width="300" height="366"
+                                                                                               class="thumbimage"
+                                                                                               srcset="//upload.wikimedia.org/wikipedia/commons/thumb/0/05/ReverseGeneticsFlu.svg/450px-ReverseGeneticsFlu.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/0/05/ReverseGeneticsFlu.svg/600px-ReverseGeneticsFlu.svg.png 2x"
+                                                                                               data-file-width="2145"
+                                                                                               data-file-height="2620"/></a>
+                                <div class="thumbcaption">
+                                    <div class="magnify"></div>
+                                    Desenvolvimento da vacina da por técnicas de reversão genética.
+                                </div>
+                            </div>
+                        </div>
+                        <p>Vacinas inovadoras estão atualmente em desenvolvimento e uso experimental.</p>
+                        <ul>
+                            <li>Vacinas com combinam tais células com antígenos de forma a apresentar os antígenos para
+                                as células brancas presentes no sangue, para estimular uma resposta imune. Estas vacinas
+                                têm se mostrado eficazes em testes para tratar tumores cerebrais' e em s malignos'.
+                            </li>
+                            <li>Vetor recombinante - ao se combinar a fisiologia de um micro-organismo com o DNA de
+                                outro, imunidade pode ser criada contra doenças que possuam complexos processos
+                                infecciosos.
+                            </li>
+                            <li>Vacina de DNA - é uma técnica alternativa e altamente experimental criada a partir do
+                                DNA de um agente infeccioso sob desenvolvimento. O mecanismo proposto é a inserção e
+                                expressão de um gene (melhorado através de , tendo como alvo o reconhecimento do sistema
+                                imune) extraído do DNA viral ou bacteriano de células humanas ou animais. Algumas
+                                células do sistema imunológico que reconhecem as proteínas expressas se organizarão para
+                                atacar as proteínas e células que as expressam. Como essas células vivem por um longo
+                                tempo, se o patógeno que normalmente expressa essas proteínas é encontrado algum tempo
+                                depois, ele será imediatamente atacar pelo sistema imunológico. Uma vantagem da vacina
+                                de DNA é que ela é fácil de produzir e de estocar. Porém, ela ainda é experimental e não
+                                foi aprovada para ser testada em humanos.
+                            </li>
+                            <li>Receptor de célula-T - vacinas que contenham peptídeos oriundos de receptores de
+                                célula-T estão em pesquisa e desenvolvimento para várias doenças como , estomatite e
+                                Febre do Vale do Rift. Verificou-se que estes péptidos modulam a produção de s e
+                                melhoram a imunidade mediada pelas células.
+                            </li>
+                        </ul>
+                        <h3><span class="mw-headline" id="Val.C3.AAncia">Valência</span>'</h3>
+                        <p>Vacinas podem ser <i>monovalentes</i> (também chamadas de "univalentes") ou
+                            <i>multivalentes</i> (também chamadas de "polivalentes"). A monovalente imuniza contra um
+                            único antígeno ou micro-organismo. A vacina multivalente imuniza contra duas ou mais cepas
+                            de um mesmo micro-organismo ou até mesmo contra dois ou mais deles'.</p>
+                        <p>A valência de uma vacina multivalente pode ser denotada a partir do prefixo em grego ou
+                            latim, como no caso das vacinas <i>tetravalente</i> ou <i>quadrivalente</i>. Em alguns
+                            casos, a vacina monovalente pode ser preferível por sua rápida resposta no sistema
+                            imunológico'.</p>
+                        <h3><span class="mw-headline" id="Heterot.C3.ADpica">Heterotípica</span>'</h3>
+                        <p>Também conhecida como vacina heteróloga ou "vacinas de jennerianas", são aquelas em que os
+                            patógenos são oriundos de outros animais, que não causam a doença ou causam apenas sintomas
+                            levem que podem ser tratados. Um exemplo clássico foi o uso da varíola bovina por Jenner
+                            quando testou sua hipótese sobre a imunização das ordenhadeiras'.</p>
+                        <p>Um exemplo mais recente, é a vacina BCG, feita a partir da bactéria bovina <i> </i> que
+                            protege o corpo humano contra a tuberculose'.</p>
+                        <h2><span class="mw-headline" id="Produ.C3.A7.C3.A3o">Produção</span>'</h2>
+                        <p>A produção de vacinas possui vários estágios. Primeiro, o antígeno em si precisa ser
+                            produzido. Vírus são cultivados em células primárias, como em ovos de galinhas ou em
+                            linhagens contínuas de células, como aquelas em cultura'. Bactérias são cultivadas em um
+                            biorreator.</p>
+                        <div class="thumb tright">
+                            <div class="thumbinner" style="width:242px;"><a
+                                    href="#" class="image"><img alt=""
+                                                                                                                 src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Preparation_of_measles_vaccines.jpg/240px-Preparation_of_measles_vaccines.jpg"
+                                                                                                                 width="240"
+                                                                                                                 height="171"
+                                                                                                                 class="thumbimage"
+                                                                                                                 srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Preparation_of_measles_vaccines.jpg/360px-Preparation_of_measles_vaccines.jpg 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Preparation_of_measles_vaccines.jpg/480px-Preparation_of_measles_vaccines.jpg 2x"
+                                                                                                                 data-file-width="1536"
+                                                                                                                 data-file-height="1095"/></a>
+                                <div class="thumbcaption">
+                                    <div class="magnify"></div>
+                                    Trabalhadores abrem ovos de galinha em preparação para a produçaõ de vacina contra o
+                                    sarampo.
+                                </div>
+                            </div>
+                        </div>
+                        <p>Igualmente, uma proteína recombinante derivada dos vírus ou bactérias pode ser gerada em
+                            culturas de leveduras, bactérias ou células. Após a geração do antígeno, ele é isolado das
+                            células utilizadas para gerá-lo. Um vírus pode ser inativado, possivelmente sem precisar de
+                            purificação. As proteínas recombinantes precisam de vários processos, envolvendo
+                            ultrafiltração e cromatografia em coluna. Finalmente, a vacina é formulada pela adição de
+                            adjuvante, estabilizantes e conservantes, conforme necessário. O adjuvante aumenta a
+                            resposta imune do antígeno, os estabilizadores aumentam a vida de armazenamento e os
+                            conservantes permitem a utilização de frascos multidose'.</p>
+                        <p>As vacinas combinadas são mais difíceis de desenvolver e produzir, devido a potenciais
+                            incompatibilidades e interações desconhecidas entre os antígenos e outros ingredientes
+                            envolvidos'.</p>
+                        <p>As técnicas de produção estão em constante evolução. Espera-se que as células de mamíferos
+                            cultivadas se tornem cada vez mais importantes, comparadas com as opções convencionais, como
+                            os ovos de galinha, devido à maior produtividade e baixa incidência de problemas com a
+                            contaminação. Acredita-se que a tecnologia de recombinação que produz a vacina geneticamente
+                            destoxificada cresça em popularidade para a produção de vacinas bacterianas que usam
+                            toxoides e que as vacinas de combinação reduzam as quantidades de antigénios que contêm e,
+                            deste modo, diminuem as interacções indesejáveis, utilizando padrões moleculares associados
+                            a patógenos'.</p>
+                        <p>Em 2010, a a produziu cerca de 60% de todas as vacinas do mundo, num total de 900 milhões de
+                            dólares'.</p>
+                        <h2><span class="mw-headline" id="Sociedade_e_cultura">Sociedade e cultura</span>'</h2>
+                        <h3><span class="mw-headline" id="Oposi.C3.A7.C3.A3o">Oposição</span>'</h3>
+                        <p>A oposição à vacinação, de uma ampla gama de críticos de vacinas, existe desde as primeiras
+                            campanhas de vacinação.' Embora os benefícios da prevenção de doenças infecciosas graves
+                            superem largamente os riscos de efeitos adversos raros após a imunização,' disputas surgiram
+                            sobre a moralidade, ética, eficácia e segurança da vacinação. Alguns críticos de vacinação
+                            dizem que as vacinas são ineficazes contra a doença' ou que os estudos de segurança são
+                            inadequados.' Alguns grupos religiosos não permitem a vacinação' e alguns grupos políticos
+                            se opõem à vacinação obrigatória com base na .'</p>
+                        <div class="thumb tleft">
+                            <div class="thumbinner" style="width:222px;"><a
+                                    href="#" class="image"><img alt=""
+                                                                                                            src="//upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Guerra_Vaccino-Obrigateza%21.jpg/220px-Guerra_Vaccino-Obrigateza%21.jpg"
+                                                                                                            width="220"
+                                                                                                            height="154"
+                                                                                                            class="thumbimage"
+                                                                                                            srcset="//upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Guerra_Vaccino-Obrigateza%21.jpg/330px-Guerra_Vaccino-Obrigateza%21.jpg 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Guerra_Vaccino-Obrigateza%21.jpg/440px-Guerra_Vaccino-Obrigateza%21.jpg 2x"
+                                                                                                            data-file-width="1236"
+                                                                                                            data-file-height="868"/></a>
+                                <div class="thumbcaption">
+                                    <div class="magnify"></div>
+                                    A a em e de , publicada na revista <i>o</i>, em 4.
+                                </div>
+                            </div>
+                        </div>
+                        <p>Em resposta, a comunidade científica tem levantado a preocupação de que a divulgação de
+                            informações infundadas sobre os riscos médicos das vacinas aumente as taxas de infecções que
+                            ameaçam a vida, não só nas crianças cujos pais recusaram a vacinação, mas também naqueles
+                            que não podem ser vacinados devido à idade ou imunodeficiência, que poderiam contrair
+                            infecções de portadores não vacinados (ver ).' Alguns pais acreditam que as vacinas causam ,
+                            embora não haja evidências científicas para apoiar essa ideia.' Em 2011 descobriu-se que
+                            Andrew Wakefield, principal proponente de uma das principais controvérsias sobre uma suposta
+                            ligação entre o autismo e vacinas, era financeiramente motivado a falsificar dados de
+                            pesquisa e foi posteriormente despojado de sua licença médica.' Nos , as pessoas que recusam
+                            vacinas por razões não médicas constituíram uma grande percentagem dos casos de o e
+                            subsequentes casos de perda auditiva permanente e morte causada pela doença.'</p>
+                        <p>Em novembro de 1904, em resposta a anos de inadequado, seguidos por uma mal explicada
+                            campanha de saúde pública liderada pelo renomado funcionário de saúde pública z, cidadãos e
+                            cadetes militares no começaram um levante conhecido como . Os tumultos irromperam no dia em
+                            que a lei de vacinação entrou em vigor; a vacinação simbolizava o aspecto mais temido e mais
+                            tangível de um plano de saúde pública que incluía outras características, como a renovação
+                            urbana, que muitos haviam se oposto durante anos.'</p>
 
-    <h2>PUDIM</h2>
-    <p>Um pudim é mostrado abaixo</p>
-
-
-    <div>
-        {% load static %}
-        <img src="{% static "images/pudim.jpg" %}" alt="Pudim" style="width:555px;height:540px;"/>
-    </div>
-
-{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>{% endblock %}
