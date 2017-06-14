@@ -415,7 +415,6 @@ def editar_conta(request):
                     user.email = email_new
             user.first_name = name_new
             user.save()
-            dependentes = Dependente.objects.filter(usuario=request.user.usuario)
             messages.info(request, 'Usuario editado com sucesso')
             return redirect('gerenciarconta')
 
