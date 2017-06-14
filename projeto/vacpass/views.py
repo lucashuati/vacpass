@@ -417,7 +417,7 @@ def editar_conta(request):
             user.save()
             dependentes = Dependente.objects.filter(usuario=request.user.usuario)
             messages.info(request, 'Usuario editado com sucesso')
-            return render(request, 'vacpass/conta/gerenciar_conta.html', {'form': DependenteForm(), 'dependentes': dependentes})
+            return redirect('gerenciarconta')
 
     return render(request, 'vacpass/conta/editar_conta.html', {'form': form})
 

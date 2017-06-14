@@ -21,11 +21,7 @@
 
         <input class="cartao-input" id="tab1" type="radio" name="tabs" checked>
         <label for="tab1">{{ request.user.first_name }}</label>
-        {% for dept in dependetes %}
-            <input class="cartao-input" id="tab{{ forloop.counter|add:'1' }}" type="radio" name="tabs">
-            <label for="tab{{ forloop.counter|add:'1' }}">{{ dept.nome }}</label>
-        {% endfor %}
-
+        
         <section id="content1">
             {% for foo, key in doses.items %}
                 <div class="vacina-column" style="float: left;">
@@ -122,13 +118,5 @@
                 </div>
             {% endif %}
         </section>
-        {% for foo in dependetes %}
-            <section id="content{{ forloop.counter|add:'1' }}">
-
-                WAIT
-
-
-            </section>
-        {% endfor %}
     </main>
 {% endblock %}
